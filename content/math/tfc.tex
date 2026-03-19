@@ -1,0 +1,86 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+
+\title{Teorema Fundamental do Cálculo}
+\author{Notas de Estudo}
+\date{}
+
+% Ambientes de teorema
+\newtheorem{theorem}{Teorema}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{corollary}[theorem]{Corolário}
+\newtheorem{definition}{Definição}
+\newtheorem{example}{Exemplo}
+
+\begin{document}
+\maketitle
+
+\section{Introdução}
+
+O Teorema Fundamental do Cálculo estabelece a conexão profunda entre
+diferenciação e integração — duas operações aparentemente distintas.
+
+\section{Enunciados}
+
+\begin{theorem}[TFC — Parte 1]
+  Seja $f$ contínua em $[a,b]$. A função:
+  \[
+  F(x) = \int_a^x f(t)\,dt
+  \]
+  é diferenciável em $(a,b)$ e $F'(x) = f(x)$.
+\end{theorem}
+
+\begin{proof}
+  Pela definição de derivada:
+  \[
+  F'(x) = \lim_{h \to 0} \frac{F(x+h) - F(x)}{h}
+         = \lim_{h \to 0} \frac{1}{h}\int_x^{x+h} f(t)\,dt
+  \]
+  Pelo Teorema do Valor Médio para integrais, existe $c \in (x, x+h)$ tal que:
+  \[
+  \frac{1}{h}\int_x^{x+h} f(t)\,dt = f(c)
+  \]
+  Como $c \to x$ quando $h \to 0$ e $f$ é contínua, $f(c) \to f(x)$.
+  Portanto $F'(x) = f(x)$. \qed
+\end{proof}
+
+\begin{theorem}[TFC — Parte 2]
+  Se $F$ é uma primitiva de $f$ em $[a,b]$, então:
+  \[
+  \int_a^b f(x)\,dx = F(b) - F(a)
+  \]
+\end{theorem}
+
+\section{Exemplos}
+
+\begin{example}
+  Calcule $\displaystyle\int_0^\pi \sin x\,dx$.
+
+  Como $F(x) = -\cos x$ é primitiva de $\sin x$:
+  \[
+  \int_0^\pi \sin x\,dx = -\cos(\pi) - (-\cos 0) = 1 + 1 = 2
+  \]
+\end{example}
+
+\begin{example}
+  A derivada de $\displaystyle G(x) = \int_1^x e^{t^2}\,dt$ é:
+  \[
+  G'(x) = e^{x^2}
+  \]
+  diretamente pela Parte 1 do TFC, sem precisar calcular a integral.
+\end{example}
+
+\section{Corolários}
+
+\begin{corollary}
+  Toda função contínua possui primitiva.
+\end{corollary}
+
+\begin{corollary}
+  Se $f$ é contínua e $\displaystyle\int_a^b f(x)\,dx = 0$ para todo $[a,b]$,
+  então $f \equiv 0$.
+\end{corollary}
+
+\end{document}

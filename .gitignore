@@ -1,0 +1,23 @@
+# LaTeX auxiliares
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+
+# Site gerado (é criado pelo Actions, não versionar)
+site/
+
+# Python
+__pycache__/
+*.pyc
+.env

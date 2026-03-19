@@ -1,0 +1,75 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+\title{Currículo — Seu Nome}
+\author{Seu Nome}
+\date{}
+
+% Remover numeração de páginas
+\pagestyle{empty}
+
+% Estilo de seções
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{1em}{0.5em}
+
+\begin{document}
+
+{\LARGE\bfseries Seu Nome} \hfill \href{mailto:voce@email.com}{voce@email.com}
+
+\medskip
+São Paulo, SP · \href{https://github.com/seu-usuario}{github.com/seu-usuario} · +55 11 9xxxx-xxxx
+
+\section{Resumo}
+Profissional com experiência em desenvolvimento de software e pesquisa acadêmica,
+com foco em sistemas distribuídos e aprendizado de máquina.
+
+\section{Experiência}
+
+\textbf{Engenheiro de Software Sênior} \hfill Jan 2022 -- Presente \\
+\textit{Empresa XYZ, São Paulo}
+\begin{itemize}
+  \item Liderou migração de monolito para microserviços, reduzindo latência em 40\%
+  \item Desenvolveu pipeline de ML para recomendação com 2M de usuários ativos
+  \item Mentoria de 4 desenvolvedores júnior
+\end{itemize}
+
+\medskip
+\textbf{Engenheiro de Software} \hfill Mar 2019 -- Dez 2021 \\
+\textit{Startup ABC, São Paulo}
+\begin{itemize}
+  \item Construiu API REST em Go servindo 500k requisições/dia
+  \item Implementou CI/CD com GitHub Actions e deploy no Kubernetes
+\end{itemize}
+
+\section{Formação}
+
+\textbf{Mestrado em Ciência da Computação} \hfill 2017 -- 2019 \\
+Universidade de São Paulo (USP) \\
+\textit{Dissertação: Algoritmos de otimização para redes neurais esparsas}
+
+\medskip
+\textbf{Bacharelado em Engenharia da Computação} \hfill 2013 -- 2017 \\
+Universidade Estadual de Campinas (UNICAMP)
+
+\section{Habilidades}
+
+\begin{tabular}{ll}
+\textbf{Linguagens:}   & Python, Go, Rust, C++, SQL \\
+\textbf{Frameworks:}   & PyTorch, FastAPI, React, gRPC \\
+\textbf{Infraestrutura:} & Docker, Kubernetes, AWS, Terraform \\
+\textbf{Idiomas:}      & Português (nativo), Inglês (fluente)
+\end{tabular}
+
+\section{Publicações}
+
+\begin{enumerate}
+  \item Seu Nome, Co-autor. \textit{Sparse Neural Networks via Adaptive Pruning}.
+        ICML 2020. \href{https://arxiv.org/}{arXiv:2001.00000}
+\end{enumerate}
+
+\end{document}

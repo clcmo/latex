@@ -1,0 +1,84 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+\title{Aprendizado de Máquina: Uma Introdução}
+\subtitle{Conceitos Fundamentais}
+\author{Seu Nome}
+\date{\today}
+\institute{Sua Instituição}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Agenda}
+\tableofcontents
+\end{frame}
+
+\section{O que é Aprendizado de Máquina?}
+
+\begin{frame}{Definição}
+  Aprendizado de Máquina é um subcampo da IA que permite que sistemas
+  \textbf{aprendam a partir de dados} sem serem explicitamente programados.
+
+  \bigskip
+  Três paradigmas principais:
+  \begin{itemize}
+    \item \textbf{Supervisionado} — aprende com pares (entrada, saída)
+    \item \textbf{Não supervisionado} — encontra padrões sem rótulos
+    \item \textbf{Por reforço} — aprende por tentativa e erro
+  \end{itemize}
+\end{frame}
+
+\section{Regressão Linear}
+
+\begin{frame}{Regressão Linear}
+  Dado um conjunto $\{(x_i, y_i)\}_{i=1}^n$, queremos encontrar:
+
+  \[
+  \hat{y} = \theta_0 + \theta_1 x
+  \]
+
+  Minimizando o erro quadrático médio:
+
+  \[
+  J(\theta) = \frac{1}{2n} \sum_{i=1}^{n} \left(\hat{y}_i - y_i\right)^2
+  \]
+\end{frame}
+
+\begin{frame}{Gradiente Descendente}
+  Atualização dos parâmetros:
+
+  \[
+  \theta_j \leftarrow \theta_j - \alpha \frac{\partial J}{\partial \theta_j}
+  \]
+
+  onde $\alpha$ é a taxa de aprendizado.
+
+  \begin{block}{Intuição}
+    Seguimos o gradiente negativo — a direção de maior descida.
+  \end{block}
+\end{frame}
+
+\section{Conclusão}
+
+\begin{frame}{Próximos Passos}
+  \begin{enumerate}
+    \item Estudar regularização (L1, L2)
+    \item Explorar redes neurais
+    \item Praticar com datasets reais (Kaggle, UCI)
+  \end{enumerate}
+
+  \bigskip
+  \centering
+  \textit{``A melhor forma de aprender é fazendo.''}
+\end{frame}
+
+\end{document}

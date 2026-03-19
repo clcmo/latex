@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+
+\title{Introdução à Análise de Fourier}
+\author{Seu Nome}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Este artigo apresenta os conceitos fundamentais da análise de Fourier,
+incluindo séries e transformadas, com aplicações em sinais e sistemas.
+\end{abstract}
+
+\section{Séries de Fourier}
+
+Uma função periódica $f(x)$ com período $2\pi$ pode ser escrita como:
+
+\[
+f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left( a_n \cos(nx) + b_n \sin(nx) \right)
+\]
+
+onde os coeficientes são dados por:
+
+\[
+a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x)\cos(nx)\,dx, \qquad
+b_n = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x)\sin(nx)\,dx
+\]
+
+\subsection{Exemplo: Onda Quadrada}
+
+Para a onda quadrada $f(x) = \text{sgn}(\sin x)$, os coeficientes valem:
+
+\[
+b_n = \begin{cases} \dfrac{4}{n\pi} & \text{se } n \text{ é ímpar} \\ 0 & \text{se } n \text{ é par} \end{cases}
+\]
+
+\section{Transformada de Fourier}
+
+Para funções não periódicas, usamos a transformada:
+
+\[
+\hat{f}(\xi) = \int_{-\infty}^{\infty} f(x)\, e^{-2\pi i x \xi}\, dx
+\]
+
+E a transformada inversa:
+
+\[
+f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi)\, e^{2\pi i x \xi}\, d\xi
+\]
+
+\subsection{Propriedades Importantes}
+
+\begin{itemize}
+  \item \textbf{Linearidade:} $\widehat{af + bg} = a\hat{f} + b\hat{g}$
+  \item \textbf{Deslocamento:} $\widehat{f(x-a)}(\xi) = e^{-2\pi i a\xi}\hat{f}(\xi)$
+  \item \textbf{Convolução:} $\widehat{f * g} = \hat{f} \cdot \hat{g}$
+  \item \textbf{Parseval:} $\displaystyle\int |f|^2\,dx = \int |\hat{f}|^2\,d\xi$
+\end{itemize}
+
+\section{Conclusão}
+
+A análise de Fourier é uma ferramenta central em matemática aplicada,
+processamento de sinais, física e engenharia.
+
+\end{document}
