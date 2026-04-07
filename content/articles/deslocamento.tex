@@ -109,20 +109,20 @@ Em trajetórias circulares ou curvas, é mais eficiente utilizar o sistema $(r, 
 
 Nesta seção, analisamos o deslocamento do Pikachu do Laboratório do Prof. Carvalho até a padaria onde se encontra o Ash, aplicando os conceitos de cinemática vetorial.
 
-\subsection{1. O Ponto de Partida (Vetor Posição)}
+\subsection{O Ponto de Partida (Vetor Posição)}
 Definimos o Laboratório como a origem do sistema de coordenadas cartesianas.
 \begin{itemize}
     \item \textbf{Vetor Posição Inicial:} $\vec{r}_0 = 0\hat{i} + 0\hat{j}$
 \end{itemize}
 
-\subsection{2. O Desvio pelo Gramado (Coordenadas Polares)}
+\subsection{O Desvio pelo Gramado (Coordenadas Polares)}
 Para evitar um bando de Spearows, o Pikachu realiza um movimento circular uniforme em um arco de $90^\circ$ ($\frac{\pi}{2}$ rad).
 Considerando um raio $r = 10$ m, a posição final deste trecho em coordenadas polares é $(10, \frac{\pi}{2})$.
 \\
 Convertendo para coordenadas cartesianas:
 $$\vec{r}_1 = (10 \cos 90^\circ)\hat{i} + (10 \sin 90^\circ)\hat{j} = 0\hat{i} + 10\hat{j} \text{ [m]}$$
 
-\subsection{3. A Reta Final (Vetor Velocidade Média)}
+\subsection{A Reta Final (Vetor Velocidade Média)}
 Pikachu avista a padaria na posição $\vec{r}_{ash} = 20\hat{i} + 10\hat{j}$. Ele percorre esse trecho retilíneo em $\Delta t = 5$ s.
 \begin{itemize}
     \item \textbf{Deslocamento:} $\Delta \vec{r} = \vec{r}_{ash} - \vec{r}_1 = (20-0)\hat{i} + (10-10)\hat{j} = 20\hat{i}$ m.
@@ -130,7 +130,7 @@ Pikachu avista a padaria na posição $\vec{r}_{ash} = 20\hat{i} + 10\hat{j}$. E
     $$\vec{v}_m = \frac{\Delta \vec{r}}{\Delta t} = \frac{20\hat{i}}{5} = 4\hat{i} \text{ [m/s]}$$
 \end{itemize}
 
-\subsection{4. Análise da Velocidade Escalar Média}
+\subsection{Análise da Velocidade Escalar Média}
 A distância total percorrida ($d$) é a soma do comprimento do arco ($s$) com o trecho retilíneo final:
 $$s = \frac{1}{4}(2\pi r) = \frac{1}{4}(2 \cdot \pi \cdot 10) \approx 15,7 \text{ m}$$
 $$d = 15,7 + 20 = 35,7 \text{ m}$$
@@ -355,6 +355,123 @@ A razão entre a distância percorrida e o módulo do deslocamento neste caso é
     % Pontos
     \filldraw (0,0) circle (1.5pt) node[below right] {$P_i$};
     \filldraw (-2,2) circle (1.5pt) node[above left] {$P_f$};
+\end{tikzpicture}
+\end{center}
+
+\section{Velocidade Relativa e Composição de Movimentos}
+
+Nesta análise, consideramos dois referenciais: o solo (fixo, onde está Misty) e o referencial em movimento (Ash). A posição do Pikachu ($P$) em relação ao solo é dada pela soma vetorial da posição do Ash em relação ao solo e a posição do Pikachu em relação ao Ash.
+
+\subsection{Equação de Transformação de Galileu}
+A velocidade do Pikachu em relação ao solo ($\vec{v}_{P,S}$) é a soma da velocidade do Pikachu em relação ao Ash ($\vec{v}_{P,A}$) com a velocidade do próprio Ash em relação ao solo ($\vec{v}_{A,S}$):
+
+\begin{equation}
+\vec{v}_{P,S} = \vec{v}_{P,A} + \vec{v}_{A,S}
+\end{equation}
+
+Isso implica que a velocidade relativa (o que Ash observa) é:
+\begin{equation}
+\vec{v}_{P,A} = \vec{v}_{P,S} - \vec{v}_{A,S}
+\end{equation}
+
+\subsection{Representação Gráfica: O Triângulo de Velocidades}
+
+Abaixo, apresentamos dois diagramas. O primeiro foca nos vetores posição e o segundo na composição das velocidades formando o triângulo vetorial.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=0.8]
+    % --- GRÁFICO 1: POSIÇÃO (REFERENCIAL MISTY NO SOLO) ---
+    \begin{scope}[xshift=-5cm]
+        \draw[->, thin, gray] (-1,0) -- (4,0) node[right] {$x$};
+        \draw[->, thin, gray] (0,-1) -- (0,4) node[above] {$y$};
+        
+        \coordinate (M) at (0,0);
+        \coordinate (A) at (2,1);
+        \coordinate (P) at (3,3);
+        
+        \draw[->, thick, blue] (M) -- (A) node[midway, below right] {$\vec{r}_{A,S}$};
+        \draw[->, thick, red] (A) -- (P) node[midway, left] {$\vec{r}_{P,A}$};
+        \draw[->, ultra thick, purple] (M) -- (P) node[midway, above left] {$\vec{r}_{P,S}$};
+        
+        \filldraw (M) circle (2pt) node[below left] {Misty (S)};
+        \filldraw (A) circle (2pt) node[right] {Ash (S')};
+        \filldraw (P) circle (2pt) node[above] {Pikachu};
+        \node at (1.5,-1.5) {(a) Vetores Posição};
+    \end{scope}
+
+    % --- GRÁFICO 2: TRIÂNGULO DE VELOCIDADES ---
+    \begin{scope}[xshift=4cm]
+        \draw[->, thin, gray] (-1,0) -- (4,0) node[right] {$x$};
+        \draw[->, thin, gray] (0,-1) -- (0,4) node[above] {$y$};
+
+        % Vetores de velocidade formando o triângulo
+        \draw[->, ultra thick, blue] (0,0) -- (3,0) node[midway, below] {$\vec{v}_{A,S}$};
+        \draw[->, ultra thick, red] (3,0) -- (3,2) node[midway, right] {$\vec{v}_{P,A}$};
+        \draw[->, ultra thick, purple] (0,0) -- (3,2) node[midway, above left] {$\vec{v}_{P,S}$};
+
+        \node at (1.5,-1.5) {(b) Triângulo de Velocidades};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Análise do Módulo}
+Quando os movimentos de Ash (no solo) e do Pikachu (em relação ao Ash) são perpendiculares, o módulo da velocidade do Pikachu em relação ao solo ($\vec{v}_{P,S}$) é obtido pelo Teorema de Pitágoras, resultando na hipotenusa do triângulo ilustrado no gráfico (b):
+
+\begin{equation}
+v_{P,S} = \sqrt{v_{A,S}^2 + v_{P,A}^2}
+\end{equation}
+
+Se Ash se move a $4$ m/s para o leste e o Pikachu se move a $3$ m/s para o norte em relação ao Ash, a velocidade que Misty observa no solo é de $5$ m/s.
+
+\section{Dedução Analítica via Cálculo Diferencial}
+
+Para compreender a transição entre os referenciais de Misty ($S$, solo) e Ash ($M$, módulo em movimento), utilizamos a derivação temporal dos vetores posição.
+
+\subsection{Obtenção da Velocidade Relativa}
+Seja $\vec{r}_{PS}$ o vetor posição do Pikachu em relação ao solo, $\vec{r}_{PM}$ a posição do Pikachu em relação ao Ash, e $\vec{r}_{MS}$ a posição do Ash em relação ao solo. A relação vetorial é:
+\begin{equation}
+\vec{r}_{PS} = \vec{r}_{PM} + \vec{r}_{MS}
+\end{equation}
+
+Derivando ambos os lados em relação ao tempo ($t$), obtemos as velocidades instantâneas:
+\begin{equation}
+\frac{d\vec{r}_{PS}}{dt} = \frac{d\vec{r}_{PM}}{dt} + \frac{d\vec{r}_{MS}}{dt}
+\end{equation}
+
+Substituindo pelas definições de velocidade ($\vec{v} = \frac{d\vec{r}}{dt}$):
+\begin{equation}
+\vec{v}_{PS} = \vec{v}_{PM} + \vec{v}_{MS}
+\end{equation}
+
+Onde $\vec{v}_{MS} = \vec{v}$ representa a velocidade constante do Ash (módulo) em relação ao solo de Misty.
+
+\subsection{Análise da Aceleração e Conservação}
+Para analisar a aceleração, derivamos a equação da velocidade em relação ao tempo. Dado que o Ash se move com velocidade constante em relação ao solo ($\vec{v}_{MS} = \vec{v}$), sua derivada é nula:
+\begin{equation}
+\vec{a}_{MS} = \frac{d\vec{v}_{MS}}{dt} = 0
+\end{equation}
+
+Aplicando a derivada temporal na equação da velocidade total:
+\begin{equation}
+\frac{d\vec{v}_{PS}}{dt} = \frac{d\vec{v}_{PM}}{dt} + \frac{d\vec{v}_{MS}}{dt}
+\end{equation}
+
+Como $\frac{d\vec{v}_{MS}}{dt} = 0$, a expressão resulta em:
+\begin{equation}
+\vec{a}_{PS} = \vec{a}_{PM}
+\end{equation}
+
+\subsection{Conclusão sobre Referenciais Inerciais}
+O fato de $\frac{d\vec{v}_{MS}}{dt} = 0$ implica que o referencial do Ash é um **Referencial Inercial**. Isso significa que a aceleração que Misty observa no Pikachu ($\vec{a}_{PS}$) é exatamente a mesma aceleração que o Ash observa ($\vec{a}_{PM}$). As leis da dinâmica de Newton permanecem idênticas para ambos os observadores, pois o termo de "força fictícia" é zero.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=1.1]
+    % Vetores de Velocidade (Triângulo de Derivadas)
+    \draw[->, blue, ultra thick] (0,0) -- (3,0) node[midway, below] {$\vec{v}_{MS} = \vec{v}$};
+    \draw[->, red, ultra thick] (3,0) -- (3,2) node[midway, right] {$\vec{v}_{PM}$};
+    \draw[->, purple, ultra thick] (0,0) -- (3,2) node[midway, above left] {$\vec{v}_{PS}$};
+    
+    \node[anchor=north] at (1.5,-0.5) {\footnotesize $\vec{v}_{PS} = \vec{v}_{PM} + \vec{v}$};
 \end{tikzpicture}
 \end{center}
 
