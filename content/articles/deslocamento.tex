@@ -1,0 +1,361 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\usepackage{tikz}
+
+\geometry{margin=1in}
+
+\title{Análise do Movimento Bidimensional: Da Posição Vetorial às Coordenadas Polares}
+\author{Camila Leite Coura Mariano de Oliveira}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introdução}
+O movimento bidimensional descreve a trajetória de um corpo em um plano, exigindo o uso de vetores para determinar sua localização e evolução temporal.
+
+\begin{tikzpicture}[>=stealth]
+    % Grade (Grid)
+    \draw[very thin, gray!30] (-1,-1) grid (6,6);
+    
+    % Eixos X e Y
+    \draw[->, thick] (-1,0) -- (6,0) node[right] {$x$};
+    \draw[->, thick] (0,-1) -- (0,6) node[above] {$y$};
+    
+    % Marcadores numéricos
+    \foreach \x in {1,2,3,4,5}
+        \draw (\x, 1pt) -- (\x, -1pt) node[below] {\footnotesize \x};
+    \foreach \y in {1,2,3,4,5}
+        \draw (1pt, \y) -- (-1pt, \y) node[left] {\footnotesize \y};
+
+    % O Vetor Posição r = 4i + 4j
+    \draw[->, blue, ultra thick] (0,0) -- (4,4) 
+        node[midway, above left, black] {$\vec{r} = 4\hat{i} + 4\hat{j}$};
+    
+    % Linhas de projeção tracejadas
+    \draw[dashed, gray] (4,0) -- (4,4);
+    \draw[dashed, gray] (0,4) -- (4,4);
+    
+    % Ponto na extremidade
+    \filldraw[black] (4,4) circle (1.5pt) node[anchor=south west] {$(4,4)$};
+    
+    % Arco do ângulo (45 graus)
+    \draw[->, red] (1,0) arc (0:45:1);
+    \node[red] at (1.3, 0.5) {$45^\circ$};
+
+\end{tikzpicture}
+
+
+\section{Fundamentação Teórica}
+
+\subsection{Vetor Posição}
+O vetor posição $\vec{r}(t)$ localiza a partícula em relação à origem de um sistema de coordenadas:
+$$\vec{r}(t) = x(t)\hat{i} + y(t)\hat{j}$$
+
+\subsection{Vetor Velocidade Média}
+Diferente da velocidade escalar, o vetor velocidade média leva em conta o deslocamento vetorial $\Delta \vec{r}$ em um intervalo de tempo $\Delta t$:
+$$\vec{v}_{m} = \frac{\Delta \vec{r}}{\Delta t} = \frac{\vec{r}_f - \vec{r}_i}{t_f - t_i}$$
+
+
+\begin{tikzpicture}[>=stealth]
+    % Grade de fundo
+    \draw[very thin, gray!20] (-1,-1) grid (6,6);
+    
+    % Eixos
+    \draw[->, thick] (-1,0) -- (6,0) node[right] {$x$};
+    \draw[->, thick] (0,-1) -- (0,6) node[above] {$y$};
+
+    % Ponto Inicial A e Final B
+    \coordinate (A) at (0,0);
+    \coordinate (B) at (4,4);
+    
+    \filldraw[black] (A) circle (2pt) node[anchor=north east] {$P_i (0,0)$};
+    \filldraw[black] (B) circle (2pt) node[anchor=south west] {$P_f (4,4)$};
+
+    % Vetor Deslocamento (Linha reta tracejada - O caminho mais curto)
+    \draw[->, dashed, gray, thick] (A) -- (B) 
+        node[midway, above left] {$\Delta \vec{r}$ (vetor)};
+
+    % Trajetória Curvada (O caminho real percorrido)
+    % Usamos "out" e "in" para definir os ângulos de saída e chegada da curva
+    \draw[->, orange, ultra thick] (A) to [out=90, in=180] (2,3) to [out=0, in=225] (B);
+    
+    \node[orange, font=\bfseries] at (1.5,4) {Trajetória};
+
+    % Projeções para facilitar a leitura
+    \draw[dotted] (4,0) -- (4,4);
+    \draw[dotted] (0,4) -- (4,4);
+
+\end{tikzpicture}
+
+
+\subsection{Velocidade Escalar Média}
+A velocidade escalar média $v_{em}$ é a razão entre a distância total percorrida ($d$) e o tempo total, independentemente da direção:
+$$v_{em} = \frac{d}{\Delta t}$$
+
+\subsection{Coordenadas Polares}
+Em trajetórias circulares ou curvas, é mais eficiente utilizar o sistema $(r, \theta)$, onde:
+\begin{itemize}
+    \item $x = r \cos(\theta)$
+    \item $y = r \sin(\theta)$
+\end{itemize}
+
+\section{Estudo de Caso: Trajetória do Pikachu}
+
+Nesta seção, analisamos o deslocamento do Pikachu do Laboratório do Prof. Carvalho até a padaria onde se encontra o Ash, aplicando os conceitos de cinemática vetorial.
+
+\subsection{1. O Ponto de Partida (Vetor Posição)}
+Definimos o Laboratório como a origem do sistema de coordenadas cartesianas.
+\begin{itemize}
+    \item \textbf{Vetor Posição Inicial:} $\vec{r}_0 = 0\hat{i} + 0\hat{j}$
+\end{itemize}
+
+\subsection{2. O Desvio pelo Gramado (Coordenadas Polares)}
+Para evitar um bando de Spearows, o Pikachu realiza um movimento circular uniforme em um arco de $90^\circ$ ($\frac{\pi}{2}$ rad).
+Considerando um raio $r = 10$ m, a posição final deste trecho em coordenadas polares é $(10, \frac{\pi}{2})$.
+\\
+Convertendo para coordenadas cartesianas:
+$$\vec{r}_1 = (10 \cos 90^\circ)\hat{i} + (10 \sin 90^\circ)\hat{j} = 0\hat{i} + 10\hat{j} \text{ [m]}$$
+
+\subsection{3. A Reta Final (Vetor Velocidade Média)}
+Pikachu avista a padaria na posição $\vec{r}_{ash} = 20\hat{i} + 10\hat{j}$. Ele percorre esse trecho retilíneo em $\Delta t = 5$ s.
+\begin{itemize}
+    \item \textbf{Deslocamento:} $\Delta \vec{r} = \vec{r}_{ash} - \vec{r}_1 = (20-0)\hat{i} + (10-10)\hat{j} = 20\hat{i}$ m.
+    \item \textbf{Vetor Velocidade Média:} 
+    $$\vec{v}_m = \frac{\Delta \vec{r}}{\Delta t} = \frac{20\hat{i}}{5} = 4\hat{i} \text{ [m/s]}$$
+\end{itemize}
+
+\subsection{4. Análise da Velocidade Escalar Média}
+A distância total percorrida ($d$) é a soma do comprimento do arco ($s$) com o trecho retilíneo final:
+$$s = \frac{1}{4}(2\pi r) = \frac{1}{4}(2 \cdot \pi \cdot 10) \approx 15,7 \text{ m}$$
+$$d = 15,7 + 20 = 35,7 \text{ m}$$
+
+Considerando um tempo total de $10$ s para toda a jornada, a velocidade escalar média é:
+$$v_{em} = \frac{d}{\Delta t_{total}} = \frac{35,7}{10} = 3,57 \text{ [m/s]}$$
+
+\vfill
+\begin{center}
+    \textit{Conclusão: Pikachu alcançou a padaria com sucesso para o lanche com Ash.}
+\end{center}
+
+
+\section{Estudo de Caso 2: A Jornada de Misty à Padaria}
+
+Neste segundo cenário, analisamos o movimento da personagem Misty. Ela se encontra no ponto $A$ (origem) e precisa se deslocar até a padaria, localizada no ponto $C$. A cidade possui um traçado retangular, forçando Misty a escolher entre três trajetórias possíveis ($\vec{r}_1, \vec{r}_2, \vec{r}_3$).
+
+O objetivo é calcular a distância total percorrida ($d$) em cada caso e o vetor deslocamento ($\Delta \vec{r}$) final para todos.
+
+\subsection{Definição do Cenário e Coordenadas}
+
+Vamos definir geometricamente os pontos de interesse na malha urbana:
+\begin{itemize}
+    \item Ponto $A$ (Posição Inicial de Misty): $(0, 0)$
+    \item Ponto $C$ (A Padaria): $(4, 3)$
+    \item Pontos intermediários de esquina: $B(4, 0)$ e $D(0, 3)$.
+\end{itemize}
+
+Para simplificar os cálculos de distância, definimos as magnitudes das quadras principais:
+\begin{itemize}
+    \item $a = 4$ unidades (distância horizontal)
+    \item $b = 3$ unidades (distância vertical)
+\end{itemize}
+
+\subsection{Representação Gráfica}
+
+O gráfico abaixo ilustra as três trajetórias disponíveis para Misty.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=1.2]
+    % Grade de fundo para contexto urbano
+    \draw[very thin, gray!20] (-1,-1) grid (5,4);
+    
+    % Eixos
+    \draw[->, thick] (-0.5,0) -- (5,0) node[right] {$x$};
+    \draw[->, thick] (0,-0.5) -- (0,4) node[above] {$y$};
+
+    % Coordenadas dos pontos
+    \coordinate (A) at (0,0);
+    \coordinate (B) at (4,0);
+    \coordinate (C) at (4,3);
+    \coordinate (D) at (0,3);
+
+    % Desenho dos Pontos e Rótulos
+    \filldraw[black] (A) circle (2pt) node[anchor=north east, font=\bfseries] {A (Misty)};
+    \filldraw[black] (B) circle (2pt) node[anchor=north west] {B};
+    \filldraw[black] (C) circle (2pt) node[anchor=south west, font=\bfseries] {C (Padaria)};
+    \filldraw[black] (D) circle (2pt) node[anchor=south east] {D};
+
+    % --- Trajetória 1 (r1): ABC (Caminho 'Sul') ---
+    \draw[->, thick, blue] (A) -- (B) node[midway, below] {$a$};
+    \draw[->, thick, blue] (B) -- (C) node[midway, right] {$b$};
+    \node[blue] at (2,-0.4) {$\vec{r}_1$};
+
+    % --- Trajetória 2 (r2): ADC (Caminho 'Oeste') ---
+    \draw[->, thick, red, dashed] (A) -- (D) node[midway, left] {$b$};
+    \draw[->, thick, red, dashed] (D) -- (C) node[midway, above] {$a$};
+    \node[red] at (-0.4, 1.5) {$\vec{r}_2$};
+
+    % --- Trajetória 3 (r3): AC (Atalho pelo gramado) ---
+    \draw[->, ultra thick, green!60!black] (A) -- (C);
+    \node[green!60!black, rotate=36.8] at (2, 1.8) {$\vec{r}_3$ (Atalho)};
+
+    % Marcação de distância d=a+b nas trajetórias 1 e 2
+    \node[anchor=north west, font=\footnotesize] at (4.2, 1.5) {Nota: $a=4, b=3$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Análise Matemática das Trajetórias}
+
+Misty pode escolher uma das três funções de posição $\vec{r}(t)$, mas todas têm o mesmo ponto inicial e final. Vamos analisar a distância percorrida ($d$) e o deslocamento vetorial ($\Delta \vec{r} = \vec{r}_C - \vec{r}_A$).
+
+\subsubsection{Trajetória $\vec{r}_1$ (Caminho $ABC$)}
+Misty segue para o leste e depois para o norte.
+\begin{itemize}
+    \item \textbf{Cálculo da Distância ($d_1$):} A distância é a soma das quadras percorridas.
+    $$d_1 = \text{segmento } AB + \text{segmento } BC = a + b = 4 + 3 = 7 \text{ unidades}$$
+    \item \textbf{Vetor Deslocamento ($\Delta \vec{r}$):} $\Delta \vec{r} = (4\hat{i} + 3\hat{j}) - (0\hat{i} + 0\hat{j}) = 4\hat{i} + 3\hat{j}$.
+\end{itemize}
+
+\subsubsection{Trajetória $\vec{r}_2$ (Caminho $ADC$)}
+Misty segue para o norte e depois para o leste.
+\begin{itemize}
+    \item \textbf{Cálculo da Distância ($d_2$):}
+    $$d_2 = \text{segmento } AD + \text{segmento } DC = b + a = 3 + 4 = 7 \text{ unidades}$$
+    \item \textbf{Vetor Deslocamento ($\Delta \vec{r}$):} O mesmo que o anterior, $4\hat{i} + 3\hat{j}$, pois os pontos inicial e final são os mesmos.
+\end{itemize}
+
+\subsubsection{Trajetória $\vec{r}_3$ (Caminho $AC$ - Atalho)}
+Misty decide cortar caminho pelo gramado em linha reta.
+\begin{itemize}
+    \item \textbf{Cálculo da Distância ($d_3$):} A distância agora é o módulo do vetor deslocamento. Usamos o Teorema de Pitágoras no triângulo retângulo $ABC$.
+    $$d_3 = \sqrt{a^2 + b^2} = \sqrt{4^2 + 3^2} = \sqrt{16 + 9} = \sqrt{25} = 5 \text{ unidades}$$
+    \item \textbf{Vetor Deslocamento ($\Delta \vec{r}$):} Permanece imutável: $4\hat{i} + 3\hat{j}$.
+\end{itemize}
+
+\subsection{Conclusão do Estudo}
+
+Este caso ilustra perfeitamente a diferença entre grandezas escalares e vetoriais:
+\begin{enumerate}
+    \item O \textbf{Vetor Deslocamento} ($\Delta \vec{r}$) foi exatamente o mesmo para as três trajetórias ($4\hat{i} + 3\hat{j}$), pois ele depende apenas da posição final e inicial.
+    \item A \textbf{Distância Percorrida} ($d$) variou. Misty percorre $7$ unidades nas trajetórias urbanas ($\vec{r}_1, \vec{r}_2$) e apenas $5$ unidades usando o atalho ($\vec{r}_3$).
+\end{enumerate}
+
+
+
+
+\begin{center}
+Misty escolhe a trajetória $\vec{r}_3$, chegando mais rápido à padaria para encontrar Ash e tomar um suco.
+\end{center}
+
+
+\section{Análise Estrutural do Deslocamento Vetorial}
+
+Nesta seção, aprofundamos a representação analítica do deslocamento, utilizando a forma paramétrica fornecida para o vetor variação de posição.
+
+\subsection{Definição do Vetor Deslocamento Atualizado}
+Consideramos agora um cenário onde o deslocamento vetorial $\Delta \vec{r}$ é definido pelas componentes de escala $R$ (raio ou constante de proporção) e $T$ (parâmetro temporal ou escalar), resultando na seguinte expressão:
+
+\begin{equation}
+\Delta \vec{r} = (R T) \hat{j} - (R T) \hat{i}
+\end{equation}
+
+Rearranjando para a ordem canônica dos vetores unitários $(\hat{i}, \hat{j})$:
+\begin{equation}
+\Delta \vec{r} = -R T \hat{i} + R T \hat{j}
+\end{equation}
+
+\subsection{Cálculo do Módulo do Deslocamento ($|\Delta \vec{r}|$)}
+O módulo deste vetor representa a menor distância entre o ponto inicial e o ponto final (o "atalho"). Utilizando a norma euclidiana:
+
+$$|\Delta \vec{r}| = \sqrt{(-RT)^2 + (RT)^2}$$
+$$|\Delta \vec{r}| = \sqrt{R^2 T^2 + R^2 T^2} = \sqrt{2 R^2 T^2}$$
+$$|\Delta \vec{r}| = RT\sqrt{2}$$
+
+\subsection{Cálculo da Distância Escalar ($\Delta s$)}
+Se assumirmos que este deslocamento ocorre de forma ortogonal (seguindo primeiro o eixo $x$ e depois o eixo $y$, como nos caminhos $ABC$ ou $ADC$ anteriores), a distância escalar percorrida será a soma dos módulos das componentes:
+
+$$\Delta s = | -RT | + | RT | = 2RT$$
+
+\subsection{Comparação entre as Grandezas}
+Ao compararmos o deslocamento escalar com o módulo do vetor deslocamento para esta configuração específica, observamos a relação de desigualdade clássica da cinemática:
+
+\begin{itemize}
+    \item \textbf{Deslocamento Vetorial (Módulo):} $RT\sqrt{2} \approx 1,41 RT$
+    \item \textbf{Deslocamento Escalar (Trajetória Retangular):} $2 RT$
+\end{itemize}
+
+Como $2RT > 1,41RT$, confirmamos que o caminho percorrido ao longo dos eixos é aproximadamente $41\%$ mais longo do que o deslocamento direto (vetorial) entre os dois pontos.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth]
+    \draw[->, thin, gray] (-3,0) -- (1,0) node[right] {$x$};
+    \draw[->, thin, gray] (0,-1) -- (0,3) node[above] {$y$};
+    \draw[->, blue, ultra thick] (0,0) -- (-2,2) node[midway, above left] {$\Delta \vec{r}$};
+    \draw[dashed, red] (0,0) -- (-2,0) -- (-2,2);
+    \node[red, below] at (-1,0) {$-RT\hat{i}$};
+    \node[red, left] at (-2,1) {$RT\hat{j}$};
+\end{tikzpicture}
+\end{center}
+
+
+\section{Análise Curvilínea: Trajetória Circular}
+
+Neste cenário específico, comparamos o deslocamento vetorial retilíneo com uma trajetória percorrendo o arco de uma circunferência de raio $R T$.
+
+\subsection{Deslocamento Vetorial ($\Delta \vec{r}$)}
+Mantemos o vetor deslocamento que liga o ponto inicial ao final como:
+\begin{equation}
+\Delta \vec{r} = -R T \hat{i} + R T \hat{j}
+\end{equation}
+
+O módulo deste deslocamento (a corda do arco) é:
+\begin{equation}
+|\Delta \vec{r}| = \sqrt{(-RT)^2 + (RT)^2} = RT\sqrt{2} \approx 1,41 RT
+\end{equation}
+
+\subsection{Deslocamento Escalar ($\Delta s$)}
+Diferente do deslocamento vetorial, a distância percorrida aqui segue a curvatura de um círculo. Para um arco correspondente a um quarto de circunferência ($90^\circ$ ou $\frac{\pi}{2}$ radianos), temos:
+
+\begin{equation}
+\Delta s = \theta \cdot \text{raio} = \left( \frac{\pi}{2} \right) \cdot (RT)
+\end{equation}
+
+Portanto:
+\begin{equation}
+\Delta s = \frac{\pi R T}{2} \approx 1,57 RT
+\end{equation}
+
+\subsection{Comparação Analítica Final}
+Ao analisar os dois resultados para o mesmo ponto de partida e chegada, observamos que:
+\begin{itemize}
+    \item \textbf{Caminho mais curto (Vetorial):} $1,41 RT$
+    \item \textbf{Caminho curvo (Escalar):} $1,57 RT$
+\end{itemize}
+
+A razão entre a distância percorrida e o módulo do deslocamento neste caso é $\frac{\pi}{2\sqrt{2}} \approx 1,11$, indicando que a trajetória circular é aproximadamente $11\%$ mais longa que o deslocamento direto.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth]
+    % Eixos
+    \draw[->, gray!50] (-3,0) -- (1,0) node[right] {$x$};
+    \draw[->, gray!50] (0,-1) -- (0,3) node[above] {$y$};
+    
+    % Vetor Deslocamento (Corda)
+    \draw[->, blue, thick] (0,0) -- (-2,2) node[midway, below left] {$|\Delta \vec{r}|$};
+    
+    % Trajetória Escalar (Arco)
+    \draw[orange, ultra thick] (0,0) arc (0:90:-2);
+    \node[orange] at (-1.8, 1.8) {$\Delta s = \frac{\pi RT}{2}$};
+    
+    % Pontos
+    \filldraw (0,0) circle (1.5pt) node[below right] {$P_i$};
+    \filldraw (-2,2) circle (1.5pt) node[above left] {$P_f$};
+\end{tikzpicture}
+\end{center}
+
+\end{document}
