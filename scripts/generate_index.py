@@ -1,247 +1,236 @@
 #!/usr/bin/env python3
-"""Generate the index.html listing all published documents."""
+"""
+generate_index.py — Gera o index.html listando todos os PDFs compilados.
 
-import os, sys, json
-from pathlib import Path
+Uso:
+    python3 generate_index.py \
+        --output site/index.html \
+        --template templates/page.html \
+        --docs '{"articles": [{"title": "...", "file": "....pdf"}], ...}'
+"""
+
+import argparse
+import json
+import os
 from datetime import datetime
 
+# ---------------------------------------------------------------------------
+# Labels e ícones por categoria
+# ---------------------------------------------------------------------------
 CATEGORY_META = {
-    "articles": {"label": "Artigos",       "icon": "✦", "color": "#c8a96e"},
-    "cv":        {"label": "Currículo",     "icon": "◈", "color": "#7eb8c8"},
-    "slides":    {"label": "Apresentações", "icon": "◉", "color": "#c87eb8"},
-    "math":      {"label": "Matemática",    "icon": "∑", "color": "#7ec87e"},
+    "articles": {"label": "Artigos",    "icon": "📄", "anchor": "articles"},
+    "cv":       {"label": "Currículo",  "icon": "👤", "anchor": "cv"},
+    "slides":   {"label": "Slides",     "icon": "🖥️",  "anchor": "slides"},
+    "math":     {"label": "Matemática", "icon": "∑",  "anchor": "math"},
 }
 
-def scan_documents(site_dir: Path):
-    docs = {}
-    for category in ["articles", "cv", "slides", "math"]:
-        cat_dir = site_dir / category
-        if not cat_dir.exists():
-            continue
-        docs[category] = []
-        for html_file in sorted(cat_dir.glob("*.html")):
-            base = html_file.stem
-            has_pdf = (site_dir / "pdf" / f"{base}.pdf").exists()
-            # Try to extract title from HTML
-            content = html_file.read_text(errors="ignore")
-            title = base
-            for line in content.splitlines():
-                if "<title>" in line:
-                    t = line.replace("<title>","").replace("</title>","").strip()
-                    if t: title = t
-                    break
-            docs[category].append({
-                "base": base,
-                "title": title,
-                "html": f"{category}/{base}.html",
-                "pdf": f"pdf/{base}.pdf" if has_pdf else None,
-            })
-    return docs
+CATEGORIES_ORDER = ["articles", "cv", "slides", "math"]
 
-def render_card(doc, meta):
-    pdf_btn = ""
-    if doc["pdf"]:
-        pdf_btn = f'<a class="btn-pdf" href="{doc["pdf"]}" download>↓ PDF</a>'
-    return f"""
-    <article class="doc-card">
-      <div class="card-icon">{meta['icon']}</div>
-      <h3><a href="{doc['html']}">{doc['title']}</a></h3>
-      <div class="card-actions">
-        <a class="btn-view" href="{doc['html']}">Ver →</a>
-        {pdf_btn}
-      </div>
-    </article>"""
-
-def generate(site_dir_str):
-    site_dir = Path(site_dir_str)
-    docs = scan_documents(site_dir)
-    sections = ""
-    for cat, meta in CATEGORY_META.items():
-        items = docs.get(cat, [])
-        if not items:
-            continue
-        cards = "\n".join(render_card(d, meta) for d in items)
-        sections += f"""
-      <section class="category" id="{cat}">
-        <h2 class="cat-title" style="--accent:{meta['color']}">
-          <span class="cat-icon">{meta['icon']}</span> {meta['label']}
-        </h2>
-        <div class="card-grid">{cards}</div>
-      </section>"""
-
-    html = f"""<!DOCTYPE html>
+# ---------------------------------------------------------------------------
+# HTML inline (usado quando não há template externo)
+# ---------------------------------------------------------------------------
+DEFAULT_TEMPLATE = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LaTeX Site</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     :root {{
-      --bg: #0d0d0f;
-      --surface: #141416;
-      --border: #2a2a2e;
-      --text: #e8e4dc;
-      --muted: #888;
-      --gold: #c8a96e;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --red: #f85149;
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-family: 'EB Garamond', Georgia, serif;
       min-height: 100vh;
     }}
-    /* ── Header ── */
     header {{
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 3rem 2rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }}
-    header::before {{
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(200,169,110,.08) 0%, transparent 70%);
-      pointer-events: none;
-    }}
-    .site-title {{
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 600;
-      letter-spacing: -.02em;
-      color: var(--gold);
-    }}
-    .site-sub {{
-      margin-top: .5rem;
-      color: var(--muted);
-      font-style: italic;
-      font-size: 1.1rem;
-    }}
-    nav {{
+      padding: 1.25rem 2rem;
       display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 2rem;
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 1rem;
     }}
+    header h1 {{ font-size: 1.4rem; color: var(--accent); }}
+    header p  {{ font-size: 0.85rem; color: var(--muted); margin-top: .25rem; }}
+    nav {{ display: flex; gap: .75rem; flex-wrap: wrap; }}
     nav a {{
       color: var(--muted);
       text-decoration: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .8rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .3rem .6rem;
-      border: 1px solid transparent;
-      border-radius: 3px;
-      transition: all .2s;
+      font-size: .875rem;
+      padding: .3rem .75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: color .15s, border-color .15s;
     }}
-    nav a:hover {{ color: var(--text); border-color: var(--border); }}
-    /* ── Main ── */
-    main {{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }}
-    .category {{ margin-bottom: 4rem; }}
-    .cat-title {{
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      padding-bottom: .75rem;
-      border-bottom: 1px solid var(--border);
+    nav a:hover {{ color: var(--accent); border-color: var(--accent); }}
+    main {{ max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }}
+    .section {{ margin-bottom: 3rem; }}
+    .section-header {{
       display: flex;
       align-items: center;
       gap: .6rem;
-      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
     }}
-    .cat-icon {{ font-size: 1.2rem; opacity: .8; }}
-    .card-grid {{
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }}
-    .doc-card {{
+    .section-header h2 {{ font-size: 1.1rem; }}
+    .section-icon {{ font-size: 1.2rem; }}
+    .doc-list {{ list-style: none; display: flex; flex-direction: column; gap: .5rem; }}
+    .doc-item {{
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.5rem;
+      border-radius: 8px;
+      padding: .75rem 1rem;
       display: flex;
-      flex-direction: column;
-      gap: .75rem;
-      transition: border-color .2s, transform .2s;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: border-color .15s;
     }}
-    .doc-card:hover {{ border-color: #444; transform: translateY(-2px); }}
-    .card-icon {{ font-size: 1.4rem; opacity: .5; }}
-    .doc-card h3 {{ font-size: 1.05rem; font-weight: 600; line-height: 1.4; }}
-    .doc-card h3 a {{ color: var(--text); text-decoration: none; }}
-    .doc-card h3 a:hover {{ color: var(--gold); }}
-    .card-actions {{ display: flex; gap: .5rem; margin-top: auto; }}
-    .btn-view, .btn-pdf {{
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .75rem;
-      padding: .35rem .75rem;
-      border-radius: 3px;
+    .doc-item:hover {{ border-color: var(--accent); }}
+    .doc-title {{ font-size: .95rem; }}
+    .doc-link {{
+      font-size: .8rem;
+      color: var(--accent);
       text-decoration: none;
-      transition: all .15s;
+      padding: .25rem .6rem;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      white-space: nowrap;
+      transition: background .15s;
     }}
-    .btn-view {{
-      background: rgba(200,169,110,.12);
-      color: var(--gold);
-      border: 1px solid rgba(200,169,110,.3);
-    }}
-    .btn-view:hover {{ background: rgba(200,169,110,.22); }}
-    .btn-pdf {{
-      background: rgba(255,255,255,.05);
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }}
-    .btn-pdf:hover {{ color: var(--text); border-color: #555; }}
-    /* ── Empty state ── */
+    .doc-link:hover {{ background: rgba(88,166,255,.1); }}
     .empty {{
-      text-align: center;
-      padding: 6rem 2rem;
       color: var(--muted);
-    }}
-    .empty code {{
-      font-family: 'JetBrains Mono', monospace;
-      background: var(--surface);
-      padding: .2rem .5rem;
-      border-radius: 3px;
       font-size: .9rem;
+      padding: 1rem 0;
+      font-style: italic;
     }}
     footer {{
-      border-top: 1px solid var(--border);
       text-align: center;
       padding: 2rem;
       color: var(--muted);
-      font-size: .85rem;
-      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      border-top: 1px solid var(--border);
     }}
   </style>
 </head>
 <body>
   <header>
-    <h1 class="site-title">LaTeX Site</h1>
-    <p class="site-sub">Documentos compilados automaticamente via GitHub Actions</p>
+    <div>
+      <h1>LaTeX Site</h1>
+      <p>Documentos compilados automaticamente via GitHub Actions</p>
+    </div>
     <nav>
-      <a href="#articles">Artigos</a>
-      <a href="#cv">Currículo</a>
-      <a href="#slides">Slides</a>
-      <a href="#math">Matemática</a>
+      {nav_links}
     </nav>
   </header>
   <main>
-    {sections if sections else '<div class="empty"><p>Nenhum documento publicado ainda.</p><p>Adicione arquivos <code>.tex</code> em <code>content/</code> e faça um push.</p></div>'}
+    {sections}
   </main>
-  <footer>Gerado em {datetime.now().strftime('%d/%m/%Y %H:%M')} · LaTeX + GitHub Actions + GitHub Pages</footer>
+  <footer>
+    Gerado em {date} &middot; LaTeX + GitHub Actions + GitHub Pages
+  </footer>
 </body>
-</html>"""
+</html>
+"""
 
-    (site_dir / "index.html").write_text(html)
-    print(f"  📑 index.html gerado com {sum(len(v) for v in docs.values())} documentos")
+
+def build_nav(docs: dict) -> str:
+    links = []
+    for cat in CATEGORIES_ORDER:
+        meta = CATEGORY_META[cat]
+        links.append(
+            f'<a href="#{meta["anchor"]}">{meta["icon"]} {meta["label"]}</a>'
+        )
+    return "\n      ".join(links)
+
+
+def build_sections(docs: dict) -> str:
+    html = ""
+    for cat in CATEGORIES_ORDER:
+        meta = CATEGORY_META[cat]
+        items = docs.get(cat, [])
+
+        if items:
+            lis = "\n".join(
+                f'        <li class="doc-item">'
+                f'<span class="doc-title">{item["title"]}</span>'
+                f'<a class="doc-link" href="{cat}/{item["file"]}" '
+                f'target="_blank" rel="noopener">📥 PDF</a>'
+                f'</li>'
+                for item in items
+            )
+            list_html = f'<ul class="doc-list">\n{lis}\n      </ul>'
+        else:
+            list_html = (
+                '<p class="empty">Nenhum documento publicado ainda. '
+                'Adicione arquivos <code>.tex</code> em '
+                f'<code>content/{cat}/</code> e faça um push.</p>'
+            )
+
+        html += f"""
+    <section class="section" id="{meta['anchor']}">
+      <div class="section-header">
+        <span class="section-icon">{meta['icon']}</span>
+        <h2>{meta['label']}</h2>
+      </div>
+      {list_html}
+    </section>
+"""
+    return html
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output",   required=True, help="Caminho do index.html gerado")
+    parser.add_argument("--template", required=False, help="Template HTML externo (opcional)")
+    parser.add_argument("--docs",     required=True, help="JSON com os documentos compilados")
+    args = parser.parse_args()
+
+    docs = json.loads(args.docs)
+
+    # Remove entradas vazias geradas por linhas em branco no bash
+    for cat in docs:
+        docs[cat] = [d for d in docs[cat] if d.get("title") and d.get("file")]
+
+    # Carrega template externo ou usa o padrão embutido
+    if args.template and os.path.isfile(args.template):
+        with open(args.template, encoding="utf-8") as f:
+            template = f.read()
+    else:
+        template = DEFAULT_TEMPLATE
+
+    nav_links = build_nav(docs)
+    sections  = build_sections(docs)
+    date      = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    output = (
+        template
+        .replace("{nav_links}", nav_links)
+        .replace("{sections}",  sections)
+        .replace("{date}",      date)
+    )
+
+    os.makedirs(os.path.dirname(args.output), exist_ok=True)
+    with open(args.output, "w", encoding="utf-8") as f:
+        f.write(output)
+
+    print(f"index.html gerado em: {args.output}")
+
 
 if __name__ == "__main__":
-    generate(sys.argv[1] if len(sys.argv) > 1 else "site")
+    main()
