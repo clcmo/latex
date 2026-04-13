@@ -1,0 +1,993 @@
+% =====================================================================
+%  FUNDAMENTOS DE MECÂNICA — Apostila de Revisão com Personagens Pokémon
+%  Profª Camila Leite Coura Mariano de Oliveira
+%  Conteúdo: revisao.tex + revisao2.tex + movbim.tex
+% =====================================================================
+
+\documentclass[10.5pt, a4paper]{extarticle}
+
+% ── Pacotes Fundamentais ─────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{setspace}
+\usepackage{scrextend}
+\usepackage{booktabs}
+
+\usetikzlibrary{arrows.meta, calc}
+
+% ── Configurações de Layout ──────────────────────────────────────────
+\onehalfspacing
+\changefontsizes{10.5pt}
+\geometry{margin=2.5cm}
+
+% ── Cores temáticas Pokémon ──────────────────────────────────────────
+\definecolor{pokered}{RGB}{206,30,30}
+\definecolor{pokeblue}{RGB}{58,90,174}
+\definecolor{pokeyellow}{RGB}{250,208,0}
+\definecolor{pokegray}{RGB}{100,100,100}
+\definecolor{pokegreen}{RGB}{56,142,60}
+\definecolor{pokeorange}{RGB}{230,100,20}
+\definecolor{lightred}{RGB}{255,235,235}
+\definecolor{lightblue}{RGB}{235,245,255}
+\definecolor{lightyellow}{RGB}{255,252,230}
+\definecolor{lightgreen}{RGB}{235,250,235}
+
+% ── Cabeçalho / Rodapé ───────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{pokered}{\textbf{Fundamentos de Mecânica}}}
+\fancyhead[R]{\textcolor{pokeblue}{\textbf{Notas de Aula}}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{pokered}\leaders\hrule height \headrulewidth\hfill}}
+
+% ── Estilo de Títulos ────────────────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{pokered}}{}{0em}{\faFireAlt\quad}[]
+\titleformat{\subsection}{\large\bfseries\color{pokeblue}}{}{0em}{\faChevronRight\quad}[]
+\titleformat{\subsubsection}{\normalsize\bfseries\color{pokegreen}}{}{0em}{}[]
+
+% ── Caixas Temáticas (TColorBox) ─────────────────────────────────────
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{pikabox}[1][]{
+  enhanced, breakable,
+  title={\faLightbulb\quad Pikachu diz:},
+  colback=lightyellow, colframe=pokeyellow,
+  colbacktitle=pokeyellow, coltitle=black,
+  fonttitle=\bfseries, boxrule=1.5pt,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  #1
+}
+
+\newtcolorbox{charmanderbox}[1][]{
+  enhanced, breakable,
+  title={\faBurn\quad Charmander Alerta:},
+  colback=lightred, colframe=pokered,
+  colbacktitle=pokered, coltitle=white,
+  fonttitle=\bfseries, boxrule=1.5pt,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  #1
+}
+
+\newtcolorbox{squirtlebox}[1][]{
+  enhanced, breakable,
+  title={\faTint\quad Squirtle Explica:},
+  colback=lightblue, colframe=pokeblue,
+  colbacktitle=pokeblue, coltitle=white,
+  fonttitle=\bfseries, boxrule=1.5pt,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  #1
+}
+
+\newtcolorbox{bulbabox}[1][]{
+  enhanced, breakable,
+  title={\faLeaf\quad Bulbasaur Resolve:},
+  colback=lightgreen, colframe=pokegreen,
+  colbacktitle=pokegreen, coltitle=white,
+  fonttitle=\bfseries, boxrule=1.5pt,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  #1
+}
+
+\newtcolorbox{definicaobox}[1][]{
+  enhanced, breakable,
+  title={\faBookOpen\quad Definição},
+  colback=gray!5, colframe=pokegray,
+  colbacktitle=pokegray, coltitle=white,
+  fonttitle=\bfseries, boxrule=1pt,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  #1
+}
+
+% ── Hiperlinks ───────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, linkcolor=pokered, urlcolor=pokeblue}
+
+% =====================================================================
+\begin{document}
+% =====================================================================
+
+% ── CAPA ─────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\Huge\bfseries\color{pokered} FUNDAMENTOS DE MECÂNICA\par}
+  \vspace{0.5cm}
+  {\LARGE\color{pokered} Apostila de Revisão com Personagens Pokémon\par}
+  \vspace{0.3cm}
+  {\large\color{pokered} Profª Camila Leite Coura Mariano de Oliveira\par}
+  \vspace{1.5cm}
+  \rule{0.8\textwidth}{0.4pt}
+  \vspace{1cm}
+
+  % ── POKÉBOLA (estrutura da professora) ──────────────────────────────
+  \begin{tikzpicture}
+    % 1. Círculo principal (fundo branco + contorno preto)
+    \draw[fill=white, line width=1.5pt] (0,0) circle (2cm);
+    % 2. Metade superior vermelha
+    \begin{scope}
+      \clip (0,0) circle (2cm);
+      \fill[pokered] (-2,0) rectangle (2,2);
+    \end{scope}
+    % 3. Faixa central preta
+    \fill[black] (-2,-0.1) rectangle (2,0.1);
+    % 4. Botão externo preto
+    \draw[fill=black] (0,0) circle (0.6cm);
+    % 5. Botão médio branco
+    \draw[fill=white] (0,0) circle (0.4cm);
+    % 6. Botão interno (menor)
+    \draw[fill=white, line width=0.5pt] (0,0) circle (0.25cm);
+    % 7. Contorno externo final
+    \draw[line width=1.5pt] (0,0) circle (2cm);
+  \end{tikzpicture}
+
+  \vspace{1cm}
+  \rule{0.8\textwidth}{0.4pt}
+  \vspace{1cm}
+
+  {\Large Com os personagens:\par}
+  \vspace{0.4cm}
+  {\large
+    \faLightbulb\ \textbf{Pikachu} --- Dicas e curiosidades\\[4pt]
+    \faBurn\ \textbf{Charmander} --- Alertas e armadilhas\\[4pt]
+    \faTint\ \textbf{Squirtle} --- Explicações conceituais\\[4pt]
+    \faLeaf\ \textbf{Bulbasaur} --- Exemplos resolvidos
+  }
+
+  \vfill
+  {\normalsize Aulas de Mecânica Clássica $\cdot$ Cinemática e Dinâmica\par}
+\end{titlepage}
+
+\pagecolor{white}\color{black}
+
+% ── SUMÁRIO ──────────────────────────────────────────────────────────
+
+\tableofcontents
+\newpage
+
+% =====================================================================
+\section{Movimento Unidimensional: Conceitos Fundamentais}
+% =====================================================================
+
+\subsection{Posição, Deslocamento e Distância}
+
+\begin{definicaobox}
+A \textbf{posição} $x(t)$ de uma partícula é sua localização ao longo de um eixo de referência em função do tempo $t$.
+
+O \textbf{deslocamento} é a variação de posição:
+\[
+  \Delta x = x_f - x_i
+\]
+A \textbf{distância percorrida} é o comprimento total do caminho (sempre $\geq 0$).
+\end{definicaobox}
+
+\begin{pikabox}
+Deslocamento pode ser \textbf{negativo}! Se você sai de $x=5\,\text{m}$ e vai para $x=2\,\text{m}$, o deslocamento é $\Delta x = -3\,\text{m}$, mas a distância percorrida é $3\,\text{m}$.
+\end{pikabox}
+
+\subsection{Velocidade Média}
+
+A \textbf{velocidade média} é definida como:
+\[
+  \bar{v} = \frac{\Delta x}{\Delta t} = \frac{x_f - x_i}{t_f - t_i}
+\]
+
+\begin{charmanderbox}
+\textbf{Não confunda} velocidade média com rapidez média!
+\begin{itemize}[nosep]
+  \item \textbf{Velocidade média}: grandeza com sinal, depende apenas dos pontos inicial e final.
+  \item \textbf{Rapidez média}: distância total dividida pelo tempo total (sempre positiva).
+\end{itemize}
+\end{charmanderbox}
+
+\subsection{Velocidade Instantânea e Derivada}
+
+\begin{definicaobox}
+A velocidade instantânea $v(t)$ é a taxa de variação da posição no tempo — o limite da velocidade média quando $\Delta t \to 0$:
+\[
+  v(t) = \lim_{\Delta t \to 0} \frac{\Delta x}{\Delta t} = \frac{dx}{dt}
+\]
+\end{definicaobox}
+
+Geometricamente, $v(t)$ é a \textit{inclinação da tangente} ao gráfico $x(t)$.
+
+\begin{squirtlebox}
+Se o gráfico $x \times t$ for uma parábola, sua derivada (velocidade) será uma reta. Geometricamente, a velocidade em um ponto é a inclinação da reta tangente à curva naquele instante.
+\end{squirtlebox}
+
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+    width=10cm, height=5cm,
+    xlabel={$t$ (s)}, ylabel={$x$ (m)},
+    title={Gráfico Posição $\times$ Tempo},
+    grid=major, grid style={dotted, pokegray!40},
+    axis line style={pokegray},
+    title style={color=pokered, font=\bfseries},
+    xlabel style={color=pokegray}, ylabel style={color=pokegray},
+    xmin=0, xmax=5, ymin=0, ymax=12
+  ]
+    \addplot[thick, pokeblue, samples=100, domain=0:5] {0.5*x^2 + 0.5};
+    \addplot[thick, pokered, dashed, domain=1.5:4.5] {2*x - 1.5};
+    \node[pokered, font=\small] at (axis cs:4.2, 7) {tangente em $t_0$};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+
+% =====================================================================
+\section{O Problema Inverso: da Velocidade ao Deslocamento}
+% =====================================================================
+
+\subsection{Interpretação Gráfica}
+
+\begin{squirtlebox}
+Se conhecemos $v(t)$, podemos recuperar $\Delta x$ calculando a \textbf{área sob a curva} $v(t)$ no intervalo $[t_i, t_f]$:
+\[
+  \Delta x = \int_{t_i}^{t_f} v(t)\,dt
+\]
+Esta é a ideia central do \textit{Problema Inverso da Velocidade}.
+\end{squirtlebox}
+
+\subsection{Aceleração Média e Instantânea}
+
+\begin{definicaobox}
+\[
+  \bar{a} = \frac{\Delta v}{\Delta t}, \qquad
+  a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2}
+\]
+\end{definicaobox}
+
+\begin{pikabox}
+\textbf{Sinal da aceleração vs.\ sinal da velocidade:}
+\begin{itemize}[nosep]
+  \item $v > 0$ e $a > 0$: movimento acelerado no sentido positivo.
+  \item $v > 0$ e $a < 0$: movimento desacelerado no sentido positivo.
+  \item $v < 0$ e $a < 0$: movimento acelerado no sentido negativo.
+  \item $v < 0$ e $a > 0$: movimento desacelerado no sentido negativo.
+\end{itemize}
+\end{pikabox}
+
+% =====================================================================
+\section{Cinemática Escalar Unidimensional: MRUV e Queda Livre}
+% =====================================================================
+
+\subsection{Movimento Retilíneo Uniforme (MRU)}
+
+\begin{definicaobox}
+No MRU, a aceleração é nula: $a = 0$, portanto $v = $ constante.
+\[
+  \boxed{x(t) = x_0 + v \cdot t}
+\]
+\end{definicaobox}
+
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+    width=5.5cm, height=4cm,
+    xlabel={$t$}, ylabel={$x$},
+    title={$x \times t$ (MRU)},
+    title style={color=pokered, font=\bfseries\small},
+    xmin=0, xmax=5, ymin=0, ymax=8,
+    grid=major, grid style={dotted, gray!40},
+    axis lines=left
+  ]
+    \addplot[thick, pokeblue] {0.5 + 1.4*x};
+  \end{axis}
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}
+  \begin{axis}[
+    width=5.5cm, height=4cm,
+    xlabel={$t$}, ylabel={$v$},
+    title={$v \times t$ (MRU)},
+    title style={color=pokered, font=\bfseries\small},
+    xmin=0, xmax=5, ymin=0, ymax=4,
+    grid=major, grid style={dotted, gray!40},
+    axis lines=left
+  ]
+    \addplot[thick, pokered] {1.4};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Encontro de Dois Móveis no MRU}
+
+Dois móveis $A$ e $B$ com posições $x_A(t) = x_{0A} + v_A t$ e $x_B(t) = x_{0B} + v_B t$ se encontram quando $x_A = x_B$.
+
+\begin{bulbabox}
+\textbf{Exemplo:} $x_{0A}=0\,\text{m}$, $v_A=20\,\text{m/s}$; $x_{0B}=200\,\text{m}$, $v_B=-10\,\text{m/s}$.
+\[
+  20t = 200 - 10t \;\Rightarrow\; 30t = 200 \;\Rightarrow\; t = \frac{20}{3}\,\text{s} \approx 6{,}7\,\text{s}
+\]
+\[
+  x_{\text{encontro}} = 20 \cdot \frac{20}{3} = \frac{400}{3}\,\text{m} \approx 133{,}3\,\text{m}
+\]
+\end{bulbabox}
+
+\subsection{MRUV e a Equação de Torricelli}
+
+Quando a aceleração é constante, temos o \textbf{Movimento Retilíneo Uniformemente Variado (MRUV)}:
+\[
+  v(t) = v_0 + at, \qquad x(t) = x_0 + v_0 t + \tfrac{1}{2}at^2
+\]
+
+\begin{pikabox}
+Se você não tiver o tempo, use \textbf{Torricelli}! É a salvação para muitos problemas:
+\[
+  v^2 = v_0^2 + 2a\,\Delta x
+\]
+\end{pikabox}
+
+\subsection{Queda Livre e Lançamento Vertical}
+
+\begin{charmanderbox}
+Na queda livre, o objeto é solto ($v_0 = 0$). No lançamento vertical, a aceleração $g \approx 9{,}8\,\text{m/s}^2$ sempre aponta para \textbf{baixo}, mesmo quando o objeto está subindo!
+\end{charmanderbox}
+
+\begin{bulbabox}
+\textbf{Exemplo do Pidgey:} Um Pidgey solta uma Pokébola de uma altura de $20\,\text{m}$. Qual a velocidade ao atingir o solo? ($g=10\,\text{m/s}^2$)
+\[
+  v^2 = 0^2 + 2(10)(20) \;\Rightarrow\; v^2 = 400 \;\Rightarrow\; v = 20\,\text{m/s}
+\]
+\end{bulbabox}
+
+% =====================================================================
+\section{Movimentos Bidimensionais e Vetores}
+% =====================================================================
+
+\subsection{Introdução ao Movimento Bidimensional}
+
+O movimento bidimensional descreve a trajetória de um corpo em um plano, exigindo o uso de vetores para determinar sua localização e evolução temporal.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth]
+  % Grade
+  \draw[very thin, gray!30] (-1,-1) grid (6,6);
+  % Eixos
+  \draw[->, thick] (-1,0) -- (6,0) node[right] {$x$};
+  \draw[->, thick] (0,-1) -- (0,6) node[above] {$y$};
+  % Marcadores
+  \foreach \x in {1,2,3,4,5}
+    \draw (\x, 1pt) -- (\x, -1pt) node[below] {\footnotesize \x};
+  \foreach \y in {1,2,3,4,5}
+    \draw (1pt, \y) -- (-1pt, \y) node[left] {\footnotesize \y};
+  % Vetor posição
+  \draw[->, blue, ultra thick] (0,0) -- (4,4)
+    node[midway, above left, black] {$\vec{r} = 4\hat{i} + 4\hat{j}$};
+  % Projeções
+  \draw[dashed, gray] (4,0) -- (4,4);
+  \draw[dashed, gray] (0,4) -- (4,4);
+  \filldraw[black] (4,4) circle (1.5pt) node[anchor=south west] {$(4,4)$};
+  % Ângulo
+  \draw[->, red] (1,0) arc (0:45:1);
+  \node[red] at (1.3, 0.5) {$45^\circ$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Grandezas Vetoriais e Escalares}
+
+\begin{definicaobox}
+\begin{tabular}{ll}
+  \textbf{Escalares}: & Massa, temperatura, distância, rapidez. \\
+  \textbf{Vetoriais}: & Posição, deslocamento, velocidade, aceleração, força.
+\end{tabular}
+\end{definicaobox}
+
+\subsection{Vetor Posição}
+
+O vetor posição $\vec{r}(t)$ localiza a partícula em relação à origem de um sistema de coordenadas:
+\[
+  \vec{r}(t) = x(t)\,\hat{i} + y(t)\,\hat{j}
+\]
+
+\subsection{Operações com Vetores}
+
+Dado $\vec{A} = A_x\,\hat{i} + A_y\,\hat{j}$ e $\vec{B} = B_x\,\hat{i} + B_y\,\hat{j}$:
+\[
+  \vec{A} + \vec{B} = (A_x + B_x)\,\hat{i} + (A_y + B_y)\,\hat{j}
+\]
+\[
+  |\vec{A}| = \sqrt{A_x^2 + A_y^2}, \qquad
+  \theta = \arctan\!\left(\frac{A_y}{A_x}\right)
+\]
+
+\begin{pikabox}
+Os vetores unitários $\hat{i}$, $\hat{j}$, $\hat{k}$ têm módulo 1 e apontam nas direções $x$, $y$ e $z$, respectivamente. São a \emph{base} do espaço cartesiano!
+\end{pikabox}
+
+\subsection{Coordenadas Polares}
+
+Em trajetórias circulares ou curvas, é mais eficiente utilizar o sistema $(r, \theta)$:
+\begin{itemize}[nosep]
+  \item $x = r\cos\theta$
+  \item $y = r\sin\theta$
+\end{itemize}
+
+\subsection{Produto Escalar e Produto Vetorial}
+
+\[
+  \vec{A} \cdot \vec{B} = A_x B_x + A_y B_y = |\vec{A}|\,|\vec{B}|\cos\theta
+\]
+\[
+  \vec{A} \times \vec{B} = (A_y B_z - A_z B_y)\,\hat{i}
+                          - (A_x B_z - A_z B_x)\,\hat{j}
+                          + (A_x B_y - A_y B_x)\,\hat{k}
+\]
+
+\begin{charmanderbox}
+$\vec{A} \cdot \vec{B}$ é \textbf{escalar}; $\vec{A} \times \vec{B}$ é \textbf{vetorial} e perpendicular ao plano de $\vec{A}$ e $\vec{B}$. Além disso, o produto vetorial \textbf{não é comutativo}: $\vec{A} \times \vec{B} = -\vec{B} \times \vec{A}$!
+\end{charmanderbox}
+
+% =====================================================================
+\section{Velocidade e Aceleração Vetoriais}
+% =====================================================================
+
+\subsection{Vetor Deslocamento}
+
+\[
+  \Delta\vec{r} = \vec{r}_f - \vec{r}_i
+\]
+
+\begin{center}
+\begin{tikzpicture}[>=stealth]
+  \draw[very thin, gray!20] (-1,-1) grid (6,6);
+  \draw[->, thick] (-1,0) -- (6,0) node[right] {$x$};
+  \draw[->, thick] (0,-1) -- (0,6) node[above] {$y$};
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (4,4);
+  \filldraw[black] (A) circle (2pt) node[anchor=north east] {$P_i (0,0)$};
+  \filldraw[black] (B) circle (2pt) node[anchor=south west] {$P_f (4,4)$};
+  % Deslocamento vetorial
+  \draw[->, dashed, gray, thick] (A) -- (B)
+    node[midway, above left] {$\Delta \vec{r}$ (vetor)};
+  % Trajetória real
+  \draw[->, orange, ultra thick] (A) to [out=90, in=180] (2,3) to [out=0, in=225] (B);
+  \node[orange, font=\bfseries] at (1.5,4) {Trajetória};
+  \draw[dotted] (4,0) -- (4,4);
+  \draw[dotted] (0,4) -- (4,4);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Velocidade Vetorial Média e Instantânea}
+
+\[
+  \bar{\vec{v}} = \frac{\Delta\vec{r}}{\Delta t}, \qquad
+  \vec{v}(t) = \frac{d\vec{r}}{dt} = \dot{x}\,\hat{i} + \dot{y}\,\hat{j}
+\]
+
+A \textbf{velocidade escalar média} $v_{em}$ é a razão entre a distância total percorrida ($d$) e o tempo total, independentemente da direção:
+\[
+  v_{em} = \frac{d}{\Delta t}
+\]
+
+\begin{squirtlebox}
+A \textbf{rapidez} (speed) é o módulo da velocidade:
+\[
+  |\vec{v}| = \sqrt{v_x^2 + v_y^2}
+\]
+A direção da velocidade é \textbf{sempre tangente} à trajetória!
+\end{squirtlebox}
+
+\subsection{Aceleração Vetorial Média e Instantânea}
+
+\[
+  \bar{\vec{a}} = \frac{\Delta\vec{v}}{\Delta t}, \qquad
+  \vec{a}(t) = \frac{d\vec{v}}{dt} = \ddot{x}\,\hat{i} + \ddot{y}\,\hat{j}
+\]
+
+\begin{charmanderbox}
+A aceleração pode ter \textbf{componente tangencial} (muda a rapidez) e \textbf{componente centrípeta} (muda a direção). Num movimento circular uniforme, só existe aceleração centrípeta!
+\end{charmanderbox}
+
+% =====================================================================
+\section{Estudo de Caso I: A Jornada do Pikachu}
+% =====================================================================
+
+Nesta seção, analisamos o deslocamento do Pikachu do Laboratório do Prof.\ Carvalho até a padaria onde se encontra o Ash, aplicando os conceitos de cinemática vetorial.
+
+\subsection{Ponto de Partida — Vetor Posição}
+
+Definimos o Laboratório como a origem do sistema de coordenadas cartesianas.
+\begin{itemize}[nosep]
+  \item \textbf{Vetor Posição Inicial:} $\vec{r}_0 = 0\hat{i} + 0\hat{j}$
+\end{itemize}
+
+\subsection{O Desvio pelo Gramado — Coordenadas Polares}
+
+Para evitar um bando de Spearows, o Pikachu realiza um movimento circular uniforme em um arco de $90^\circ$ ($\frac{\pi}{2}\,\text{rad}$), com raio $r = 10\,\text{m}$. Convertendo para coordenadas cartesianas:
+\[
+  \vec{r}_1 = (10\cos 90^\circ)\,\hat{i} + (10\sin 90^\circ)\,\hat{j} = 0\,\hat{i} + 10\,\hat{j} \;\text{[m]}
+\]
+
+\subsection{A Reta Final — Vetor Velocidade Média}
+
+Pikachu avista a padaria em $\vec{r}_{\text{ash}} = 20\,\hat{i} + 10\,\hat{j}$ e percorre o trecho em $\Delta t = 5\,\text{s}$:
+\begin{itemize}[nosep]
+  \item \textbf{Deslocamento:} $\Delta\vec{r} = (20-0)\,\hat{i} + (10-10)\,\hat{j} = 20\,\hat{i}\;\text{m}$
+  \item \textbf{Vetor Velocidade Média:}
+\[
+  \vec{v}_m = \frac{\Delta\vec{r}}{\Delta t} = \frac{20\,\hat{i}}{5} = 4\,\hat{i}\;\text{[m/s]}
+\]
+\end{itemize}
+
+\subsection{Análise da Velocidade Escalar Média}
+
+A distância total percorrida é a soma do comprimento do arco ($s$) com o trecho retilíneo final:
+\[
+  s = \tfrac{1}{4}(2\pi r) = \tfrac{1}{4}(2\pi \cdot 10) \approx 15{,}7\,\text{m}
+\]
+\[
+  d = 15{,}7 + 20 = 35{,}7\,\text{m}
+\]
+Considerando um tempo total de $10\,\text{s}$:
+\[
+  v_{em} = \frac{d}{\Delta t_{\text{total}}} = \frac{35{,}7}{10} = 3{,}57\;\text{m/s}
+\]
+
+\begin{bulbabox}
+O \textbf{vetor velocidade média} e a \textbf{velocidade escalar média} são diferentes! A velocidade média vetorial usa o deslocamento $\Delta\vec{r}$ (reta ponta-a-ponta), enquanto a escalar usa a distância total percorrida ao longo do caminho.
+\end{bulbabox}
+
+% =====================================================================
+\section{Estudo de Caso II: A Jornada de Misty à Padaria}
+% =====================================================================
+
+Misty se encontra no ponto $A$ (origem) e precisa chegar à padaria no ponto $C$. A cidade tem traçado retangular, permitindo três trajetórias possíveis.
+
+\subsection{Definição do Cenário}
+
+\begin{itemize}[nosep]
+  \item Ponto $A$ (Misty): $(0, 0)$
+  \item Ponto $C$ (Padaria): $(4, 3)$
+  \item Distância horizontal: $a = 4$ unidades; distância vertical: $b = 3$ unidades.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=1.2]
+  \draw[very thin, gray!20] (-1,-1) grid (5,4);
+  \draw[->, thick] (-0.5,0) -- (5,0) node[right] {$x$};
+  \draw[->, thick] (0,-0.5) -- (0,4) node[above] {$y$};
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (4,0);
+  \coordinate (C) at (4,3);
+  \coordinate (D) at (0,3);
+  \filldraw[black] (A) circle (2pt) node[anchor=north east, font=\bfseries] {A (Misty)};
+  \filldraw[black] (B) circle (2pt) node[anchor=north west] {B};
+  \filldraw[black] (C) circle (2pt) node[anchor=south west, font=\bfseries] {C (Padaria)};
+  \filldraw[black] (D) circle (2pt) node[anchor=south east] {D};
+  % Trajetória 1: ABC
+  \draw[->, thick, pokeblue] (A) -- (B) node[midway, below] {$a$};
+  \draw[->, thick, pokeblue] (B) -- (C) node[midway, right] {$b$};
+  \node[pokeblue] at (2,-0.4) {$\vec{r}_1$};
+  % Trajetória 2: ADC
+  \draw[->, thick, pokered, dashed] (A) -- (D) node[midway, left] {$b$};
+  \draw[->, thick, pokered, dashed] (D) -- (C) node[midway, above] {$a$};
+  \node[pokered] at (-0.4, 1.5) {$\vec{r}_2$};
+  % Trajetória 3: atalho
+  \draw[->, ultra thick, pokegreen] (A) -- (C);
+  \node[pokegreen, rotate=36.8] at (2, 1.8) {$\vec{r}_3$ (Atalho)};
+  \node[anchor=north west, font=\footnotesize] at (4.2, 1.5) {$a=4,\;b=3$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Análise das Trajetórias}
+
+O \textbf{vetor deslocamento} é sempre $\Delta\vec{r} = 4\,\hat{i} + 3\,\hat{j}$ para os três caminhos. O que difere é a \textbf{distância percorrida}:
+
+\subsubsection{Trajetória $\vec{r}_1$ — Caminho $ABC$}
+\[
+  d_1 = a + b = 4 + 3 = 7\;\text{unidades}
+\]
+
+\subsubsection{Trajetória $\vec{r}_2$ — Caminho $ADC$}
+\[
+  d_2 = b + a = 3 + 4 = 7\;\text{unidades}
+\]
+
+\subsubsection{Trajetória $\vec{r}_3$ — Atalho $AC$}
+\[
+  d_3 = \sqrt{a^2 + b^2} = \sqrt{4^2 + 3^2} = \sqrt{25} = 5\;\text{unidades}
+\]
+
+\begin{squirtlebox}
+\textbf{Conclusão:} O \textbf{vetor deslocamento} ($\Delta\vec{r} = 4\hat{i}+3\hat{j}$) foi \textit{idêntico} para as três trajetórias, pois depende apenas das posições inicial e final. A \textbf{distância percorrida} variou: $7$ nas trajetórias urbanas e $5$ no atalho. Misty escolhe $\vec{r}_3$ e chega mais rápido à padaria!
+\end{squirtlebox}
+
+% =====================================================================
+\section{Análise Estrutural do Deslocamento Vetorial}
+% =====================================================================
+
+\subsection{Definição do Vetor Deslocamento Parametrizado}
+
+Consideramos um deslocamento vetorial $\Delta\vec{r}$ definido pelas componentes de escala $R$ e $T$:
+\begin{equation}
+  \Delta\vec{r} = -RT\,\hat{i} + RT\,\hat{j}
+\end{equation}
+
+\subsection{Módulo do Deslocamento}
+
+\[
+  |\Delta\vec{r}| = \sqrt{(-RT)^2 + (RT)^2} = \sqrt{2R^2T^2} = RT\sqrt{2}
+\]
+
+\subsection{Distância Escalar pela Trajetória Ortogonal}
+
+Se o deslocamento ocorrer de forma ortogonal (seguindo primeiro o eixo $x$ e depois o eixo $y$):
+\[
+  \Delta s = |-RT| + |RT| = 2RT
+\]
+
+\subsection{Comparação entre as Grandezas}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{\color{pokered}Grandeza} & \textbf{\color{pokered}Valor} \\
+\hline
+\color{pokeblue}Deslocamento vetorial (módulo) & $RT\sqrt{2} \approx 1{,}41\,RT$ \\
+\hline
+\color{pokeblue}Distância escalar (trajetória retangular) & $2RT$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Como $2RT > 1{,}41RT$, o caminho percorrido ao longo dos eixos é aproximadamente $41\%$ mais longo do que o deslocamento direto entre os dois pontos.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth]
+  \draw[->, thin, gray] (-3,0) -- (1,0) node[right] {$x$};
+  \draw[->, thin, gray] (0,-1) -- (0,3) node[above] {$y$};
+  \draw[->, pokeblue, ultra thick] (0,0) -- (-2,2)
+    node[midway, above left] {$\Delta\vec{r}$};
+  \draw[dashed, pokered] (0,0) -- (-2,0) -- (-2,2);
+  \node[pokered, below] at (-1,0) {$-RT\hat{i}$};
+  \node[pokered, left] at (-2,1) {$RT\hat{j}$};
+\end{tikzpicture}
+\end{center}
+
+% =====================================================================
+\section{Análise Curvilínea: Trajetória Circular e Comparação}
+% =====================================================================
+
+\subsection{Deslocamento Vetorial}
+
+Mantemos $\Delta\vec{r} = -RT\,\hat{i} + RT\,\hat{j}$, cujo módulo (a corda do arco) é:
+\[
+  |\Delta\vec{r}| = RT\sqrt{2} \approx 1{,}41\,RT
+\]
+
+\subsection{Distância Escalar pelo Arco Circular}
+
+Para um arco de um quarto de circunferência ($90^\circ = \frac{\pi}{2}\,\text{rad}$) com raio $RT$:
+\[
+  \Delta s = \frac{\pi}{2}\cdot RT \approx 1{,}57\,RT
+\]
+
+\subsection{Comparação Analítica}
+
+\begin{itemize}
+  \item \textbf{Caminho mais curto (vetorial):} $1{,}41\,RT$
+  \item \textbf{Caminho curvo (escalar):} $1{,}57\,RT$
+\end{itemize}
+
+A razão entre as distâncias é $\dfrac{\pi}{2\sqrt{2}} \approx 1{,}11$: o arco circular é aproximadamente $11\%$ mais longo que o deslocamento direto.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth]
+  \draw[->, gray!50] (-3,0) -- (1,0) node[right] {$x$};
+  \draw[->, gray!50] (0,-1) -- (0,3) node[above] {$y$};
+  % Vetor deslocamento
+  \draw[->, pokeblue, thick] (0,0) -- (-2,2)
+    node[midway, below left] {$|\Delta\vec{r}|$};
+  % Arco circular
+  \draw[pokeorange, ultra thick] (0,0) arc (0:90:-2);
+  \node[pokeorange] at (-1.8,1.8) {$\Delta s = \frac{\pi RT}{2}$};
+  \filldraw (0,0) circle (1.5pt) node[below right] {$P_i$};
+  \filldraw (-2,2) circle (1.5pt) node[above left] {$P_f$};
+\end{tikzpicture}
+\end{center}
+
+% =====================================================================
+\section{Movimento 2D com Aceleração Uniforme}
+% =====================================================================
+
+\subsection{Equações Cinemáticas Vetoriais}
+
+Para $\vec{a} = $ constante:
+
+\begin{definicaobox}
+\begin{align}
+  \vec{v}(t) &= \vec{v}_0 + \vec{a}\,t \\[4pt]
+  \vec{r}(t) &= \vec{r}_0 + \vec{v}_0\,t + \tfrac{1}{2}\vec{a}\,t^2 \\[4pt]
+  v^2 &= v_0^2 + 2\vec{a}\cdot(\vec{r}-\vec{r}_0)
+\end{align}
+\end{definicaobox}
+
+\subsection{Lançamento de Projéteis}
+
+Tomamos $\vec{a} = -g\,\hat{j}$ ($g \approx 9{,}8\,\text{m/s}^2$):
+\[
+  x(t) = x_0 + v_{0x}\,t, \qquad y(t) = y_0 + v_{0y}\,t - \tfrac{1}{2}g\,t^2
+\]
+\[
+  v_x = v_0\cos\theta_0, \qquad v_y = v_0\sin\theta_0 - g\,t
+\]
+
+\textbf{Alcance máximo} (para $y_0 = 0$):
+\[
+  R = \frac{v_0^2 \sin 2\theta_0}{g}
+\]
+\textbf{Altura máxima:}
+\[
+  H = \frac{(v_0 \sin\theta_0)^2}{2g}
+\]
+
+\begin{pikabox}
+O alcance é máximo quando $\theta_0 = 45°$. Ângulos complementares ($\theta$ e $90° - \theta$) produzem o mesmo alcance!
+\end{pikabox}
+
+\begin{bulbabox}
+\textbf{Exemplo:} Um projétil é lançado com $v_0 = 30\,\text{m/s}$ a $\theta_0 = 60°$.
+\[
+  v_{0x} = 30\cos 60° = 15\,\text{m/s}, \quad v_{0y} = 30\sin 60° = 15\sqrt{3}\,\text{m/s}
+\]
+\[
+  H = \frac{(15\sqrt{3})^2}{2 \times 9{,}8} = \frac{675}{19{,}6} \approx 34{,}4\,\text{m}
+\]
+\[
+  R = \frac{(30)^2 \sin 120°}{9{,}8} = \frac{900 \times \frac{\sqrt{3}}{2}}{9{,}8} \approx 79{,}5\,\text{m}
+\]
+\end{bulbabox}
+
+\subsection{Movimento Circular Uniforme (MCU)}
+
+\[
+  |\vec{a}_c| = \frac{v^2}{R}, \quad \vec{a}_c \perp \vec{v}
+\]
+\[
+  T = \frac{2\pi R}{v}, \quad f = \frac{1}{T}, \quad \omega = 2\pi f = \frac{v}{R}
+\]
+
+\begin{squirtlebox}
+No MCU, embora a \textbf{rapidez} seja constante, a \textbf{velocidade vetorial} muda de direção continuamente. Isso exige uma aceleração centrípeta ($a_c$) sempre voltada ao centro da trajetória.
+\end{squirtlebox}
+
+% =====================================================================
+\section{Velocidade Relativa e Composição de Movimentos}
+% =====================================================================
+
+\subsection{Transformação de Galileu}
+
+Consideramos dois referenciais: o solo (Misty, fixo) e o referencial em movimento (Ash). A velocidade do Pikachu em relação ao solo é:
+\begin{equation}
+  \vec{v}_{P,S} = \vec{v}_{P,A} + \vec{v}_{A,S}
+\end{equation}
+
+A velocidade relativa observada pelo Ash é:
+\begin{equation}
+  \vec{v}_{P,A} = \vec{v}_{P,S} - \vec{v}_{A,S}
+\end{equation}
+
+\subsection{Representação Gráfica: Triângulo de Velocidades}
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=0.8]
+  % Gráfico 1: Posição
+  \begin{scope}[xshift=-5cm]
+    \draw[->, thin, gray] (-1,0) -- (4,0) node[right] {$x$};
+    \draw[->, thin, gray] (0,-1) -- (0,4) node[above] {$y$};
+    \coordinate (M) at (0,0);
+    \coordinate (A) at (2,1);
+    \coordinate (P) at (3,3);
+    \draw[->, thick, pokeblue] (M) -- (A) node[midway, below right] {$\vec{r}_{A,S}$};
+    \draw[->, thick, pokered] (A) -- (P) node[midway, left] {$\vec{r}_{P,A}$};
+    \draw[->, ultra thick, pokeorange] (M) -- (P) node[midway, above left] {$\vec{r}_{P,S}$};
+    \filldraw (M) circle (2pt) node[below left] {Misty (S)};
+    \filldraw (A) circle (2pt) node[right] {Ash (S')};
+    \filldraw (P) circle (2pt) node[above] {Pikachu};
+    \node at (1.5,-1.5) {(a) Vetores Posição};
+  \end{scope}
+  % Gráfico 2: Triângulo de velocidades
+  \begin{scope}[xshift=4cm]
+    \draw[->, thin, gray] (-1,0) -- (4,0) node[right] {$x$};
+    \draw[->, thin, gray] (0,-1) -- (0,4) node[above] {$y$};
+    \draw[->, ultra thick, pokeblue] (0,0) -- (3,0) node[midway, below] {$\vec{v}_{A,S}$};
+    \draw[->, ultra thick, pokered] (3,0) -- (3,2) node[midway, right] {$\vec{v}_{P,A}$};
+    \draw[->, ultra thick, pokeorange] (0,0) -- (3,2) node[midway, above left] {$\vec{v}_{P,S}$};
+    \node at (1.5,-1.5) {(b) Triângulo de Velocidades};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Análise do Módulo}
+
+Quando os movimentos são perpendiculares, o módulo da velocidade resultante é obtido pelo Teorema de Pitágoras:
+\begin{equation}
+  v_{P,S} = \sqrt{v_{A,S}^2 + v_{P,A}^2}
+\end{equation}
+
+\begin{bulbabox}
+\textbf{Exemplo:} Ash se move a $4\,\text{m/s}$ para o leste e o Pikachu se move a $3\,\text{m/s}$ para o norte em relação ao Ash. A velocidade que Misty observa é:
+\[
+  v_{P,S} = \sqrt{4^2 + 3^2} = \sqrt{25} = 5\,\text{m/s}
+\]
+\end{bulbabox}
+
+% =====================================================================
+\section{Dedução Analítica via Cálculo Diferencial}
+% =====================================================================
+
+\subsection{Obtenção da Velocidade Relativa}
+
+Seja $\vec{r}_{PS}$ a posição do Pikachu em relação ao solo, $\vec{r}_{PM}$ em relação ao Ash, e $\vec{r}_{MS}$ a posição do Ash no solo:
+\[
+  \vec{r}_{PS} = \vec{r}_{PM} + \vec{r}_{MS}
+\]
+
+Derivando em relação ao tempo:
+\[
+  \frac{d\vec{r}_{PS}}{dt} = \frac{d\vec{r}_{PM}}{dt} + \frac{d\vec{r}_{MS}}{dt}
+  \quad\Rightarrow\quad
+  \vec{v}_{PS} = \vec{v}_{PM} + \vec{v}_{MS}
+\]
+
+\subsection{Análise da Aceleração e Referenciais Inerciais}
+
+Como o Ash se move com velocidade constante ($\vec{v}_{MS} = \vec{v} = \text{cte}$):
+\[
+  \vec{a}_{MS} = \frac{d\vec{v}_{MS}}{dt} = 0
+\]
+
+Derivando a equação de velocidade:
+\[
+  \vec{a}_{PS} = \vec{a}_{PM}
+\]
+
+\begin{squirtlebox}
+O fato de $\dfrac{d\vec{v}_{MS}}{dt} = 0$ implica que o referencial do Ash é um \textbf{Referencial Inercial}. Isso significa que a aceleração observada por Misty e pelo Ash é a mesma — as leis de Newton permanecem idênticas para ambos os observadores!
+\end{squirtlebox}
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=1.1]
+  \draw[->, pokeblue, ultra thick] (0,0) -- (3,0)
+    node[midway, below] {$\vec{v}_{MS} = \vec{v}$};
+  \draw[->, pokered, ultra thick] (3,0) -- (3,2)
+    node[midway, right] {$\vec{v}_{PM}$};
+  \draw[->, pokeorange, ultra thick] (0,0) -- (3,2)
+    node[midway, above left] {$\vec{v}_{PS}$};
+  \node[anchor=north] at (1.5,-0.5) {\footnotesize $\vec{v}_{PS} = \vec{v}_{PM} + \vec{v}_{MS}$};
+\end{tikzpicture}
+\end{center}
+
+% =====================================================================
+\section{Dinâmica: As Leis de Newton}
+% =====================================================================
+
+\begin{definicaobox}
+\textbf{2ª Lei (Princípio Fundamental):} A força resultante é o produto da massa pela aceleração:
+\[
+  \sum\vec{F} = m\,\vec{a}
+\]
+\end{definicaobox}
+
+\begin{pikabox}
+\textbf{Machamp explica:} Se você empurra um Snorlax com uma força $F$, ele terá uma aceleração pequena devido à sua grande massa (inércia). Já um Rattata voaria longe com a mesma força!
+\end{pikabox}
+
+% =====================================================================
+\section{Trabalho e Energia}
+% =====================================================================
+
+\begin{squirtlebox}
+O Trabalho ($W$) é a transferência de energia através de uma força:
+\[
+  W = F \cdot d \cdot \cos\theta
+\]
+Pelo Teorema Trabalho--Energia Cinética:
+\[
+  W_{\text{res}} = \Delta K = \tfrac{1}{2}mv_f^2 - \tfrac{1}{2}mv_i^2
+\]
+\end{squirtlebox}
+
+\begin{bulbabox}
+\textbf{Snorlax em Repouso:} Para tirar um Snorlax ($m=460\,\text{kg}$) da inércia e fazê-lo atingir $2\,\text{m/s}$, quanto trabalho é necessário?
+\[
+  W = \tfrac{1}{2}(460)(2^2) = 920\,\text{Joules}
+\]
+\end{bulbabox}
+
+% =====================================================================
+\section{Resumo das Fórmulas Essenciais}
+% =====================================================================
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\arrayrulecolor{pokeblue}
+\begin{tabular}{|l|c|}
+\hline
+\rowcolor{pokered} \textbf{\color{white}Grandeza} & \textbf{\color{white}Fórmula} \\
+\hline
+\color{pokeblue}Velocidade média          & $\bar{v} = \Delta x / \Delta t$ \\
+\hline
+\color{pokeblue}Velocidade instantânea    & $v = dx/dt$ \\
+\hline
+\color{pokeblue}Aceleração média          & $\bar{a} = \Delta v / \Delta t$ \\
+\hline
+\color{pokeblue}MRU (posição)             & $x = x_0 + vt$ \\
+\hline
+\color{pokeblue}MRUV (velocidade)         & $v = v_0 + at$ \\
+\hline
+\color{pokeblue}MRUV (posição)            & $x = x_0 + v_0 t + \tfrac{1}{2}at^2$ \\
+\hline
+\color{pokeblue}Torricelli                & $v^2 = v_0^2 + 2a\,\Delta x$ \\
+\hline
+\color{pokeblue}Módulo de vetor 2D        & $|\vec{A}| = \sqrt{A_x^2+A_y^2}$ \\
+\hline
+\color{pokeblue}Vel.\ vetorial instantânea& $\vec{v} = d\vec{r}/dt$ \\
+\hline
+\color{pokeblue}Aceleração vetorial       & $\vec{a} = d\vec{v}/dt$ \\
+\hline
+\color{pokeblue}Alcance (projétil)        & $R = v_0^2 \sin 2\theta_0 / g$ \\
+\hline
+\color{pokeblue}Altura máxima             & $H = (v_0\sin\theta_0)^2 / (2g)$ \\
+\hline
+\color{pokeblue}Aceleração centrípeta     & $a_c = v^2/R$ \\
+\hline
+\color{pokeblue}Período (MCU)             & $T = 2\pi R / v$ \\
+\hline
+\color{pokeblue}Velocidade angular        & $\omega = 2\pi f = v/R$ \\
+\hline
+\color{pokeblue}Força resultante          & $\sum\vec{F} = m\,\vec{a}$ \\
+\hline
+\color{pokeblue}Energia cinética          & $K = \tfrac{1}{2}mv^2$ \\
+\hline
+\color{pokeblue}Trabalho                  & $W = F\,d\,\cos\theta$ \\
+\hline
+\color{pokeblue}Vel.\ relativa (Galileu)  & $\vec{v}_{PS} = \vec{v}_{PM} + \vec{v}_{MS}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\vfill
+\begin{center}
+\textit{``Gotta catch 'em all --- e entender todos os movimentos!''}\\[4pt]
+\textcolor{pokered}{\rule{0.5\textwidth}{1pt}}\\[4pt]
+\small Apostila elaborada com base nas aulas de Fundamentos de Mecânica --- UAI Física.\\
+\small Profª Camila Leite Coura Mariano de Oliveira.
+\end{center}
+
+\end{document}
