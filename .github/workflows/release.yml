@@ -1,0 +1,33 @@
+name: Release
+run-name: Gerar artefatos do release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  package-site:
+    name: Empacotar site da versão
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código da release
+        uses: actions/checkout@v4
+
+      - name: Instalar TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full
+
+      - name: Gerar site e documentos
+        run: bash scripts/build.sh
+
+      - name: Empacotar site gerado
+        run: tar -czf "latex-site-${GITHUB_REF_NAME}.tar.gz" -C site .
+
+      - name: Anexar site à release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" "latex-site-${GITHUB_REF_NAME}.tar.gz" --clobber

@@ -1,0 +1,43 @@
+name: CI
+run-name: Build LaTeX em ${{ github.ref_name }}
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Compilar e validar site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full
+
+      - name: Gerar READMEs, PDFs e site
+        run: bash scripts/build.sh
+
+      - name: Validar saída do site
+        run: |
+          test -s site/index.html
+          test -s README.md
+          test -s README.en.md
+
+      - name: Publicar artefato para GitHub Pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-site
+          path: site/
+          if-no-files-found: error
