@@ -1,0 +1,418 @@
+
+\documentclass[12pt,a4paper]{article}
+
+% Pacotes
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% Configurações
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Fundamentos de Mecânica}
+\rhead{Avaliação Diagnóstica -- 2026}
+\cfoot{\thepage}
+
+\title{
+    \textbf{Resolução da Avaliação Diagnóstica}\\
+    \large Fundamentos de Mecânica (4300151)
+}
+\author{Camila Leite}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Parte I -- Questões de múltipla escolha}
+
+\subsection{Questão 1 -- Movimento uniforme}
+
+Dados:
+\[
+x_0=20\,\mathrm{m},\qquad
+x_f=0\,\mathrm{m},\qquad
+\Delta t=10\,\mathrm{s}
+\]
+
+A velocidade é:
+\[
+v=\frac{\Delta x}{\Delta t}
+=\frac{0-20}{10}=-2\,\mathrm{m/s}
+\]
+
+A equação horária:
+\[
+x(t)=x_0+vt
+\]
+
+\[
+\boxed{x(t)=20-2t}
+\]
+
+Resposta: alternativa C.
+
+\subsection{Questão 2 -- Velocidade}
+
+\[
+v_m=\frac{\Delta S}{\Delta t}
+\]
+
+Intervalo de 0 a 10 s:
+\[
+v_1=\frac{50}{10}=5\,\mathrm{m/s}
+\]
+
+Intervalo de 10 a 20 s:
+\[
+v_2=0
+\]
+
+Intervalo de 20 a 40 s:
+\[
+v_3=\frac{-50}{20}=-2,5\,\mathrm{m/s}
+\]
+
+O maior módulo ocorre entre 0 e 10 s.
+
+Resposta: alternativa E.
+
+\subsection{Questão 3 -- Área sob o gráfico}
+
+\[
+\Delta x=\int_0^{1,6}v(t)\,dt
+\]
+
+Aproximando a área por trapézios:
+\[
+A_i=\frac{v_i+v_{i+1}}{2}\Delta t
+\]
+
+Com $\Delta t=0,2\,\mathrm{s}$:
+\[
+\Delta x\approx0,7\,\mathrm{m}
+\]
+
+Resposta: alternativa A.
+
+\subsection{Questão 4 -- Lançamento vertical}
+
+\[
+v_f^2=v_0^2-2gh
+\]
+
+\[
+0=v_0^2-2(10)(0,2)
+\]
+
+\[
+v_0=\sqrt{4}
+\]
+
+\[
+\boxed{v_0=2\,\mathrm{m/s}}
+\]
+
+Resposta: alternativa A.
+
+\subsection{Questão 5 -- Queda livre}
+
+\[
+v_f^2=v_0^2+2gh
+\]
+
+\[
+v_f=\sqrt{2(10)(5)}
+\]
+
+\[
+v_f=10\,\mathrm{m/s}
+\]
+
+Conversão:
+\[
+v_f=10\cdot3,6
+\]
+
+\[
+\boxed{v_f=36\,\mathrm{km/h}}
+\]
+
+Resposta: alternativa A.
+
+\subsection{Questão 6 -- Encontro de automóveis}
+
+\[
+x_I=80t
+\]
+
+\[
+x_P=\frac{8t^2}{2}
+\]
+
+Igualando:
+\[
+80t=4t^2
+\]
+
+\[
+t=20\,\mathrm{s}
+\]
+
+Resposta: alternativa B.
+
+\subsection{Questão 7 -- Energia cinética}
+
+\[
+E_m=E_c+E_p
+\]
+
+\[
+E_c=E_m-E_p
+\]
+
+Nos extremos:
+\[
+E_c=0
+\]
+
+Na posição de equilíbrio, a energia cinética é máxima.
+
+Resposta: alternativa C.
+
+\subsection{Questão 8 -- Frenagem}
+
+Velocidade após o tempo adicional de reação:
+\[
+v=14+1(1)=15\,\mathrm{m/s}
+\]
+
+Distância adicional durante a reação:
+\[
+\Delta x=14(1)+\frac{1(1)^2}{2}
+\]
+
+\[
+\Delta x=14,5\,\mathrm{m}
+\]
+
+Distância de frenagem do motorista atento:
+\[
+d_A=\frac{14^2}{2(5)}=19,6\,\mathrm{m}
+\]
+
+Distância de frenagem do motorista desatento:
+\[
+d_D=\frac{15^2}{2(5)}=22,5\,\mathrm{m}
+\]
+
+Diferença total:
+\[
+\Delta d=14,5+(22,5-19,6)
+\]
+
+\[
+\boxed{\Delta d=17,4\,\mathrm{m}}
+\]
+
+Resposta: alternativa E.
+
+\subsection{Questão 9 -- Geometria da viga}
+
+\[
+L^2=x^2+y^2
+\]
+
+A distância entre o ponto médio e O:
+\[
+d_{MO}=
+\sqrt{\frac{x^2}{4}+\frac{y^2}{4}}
+\]
+
+\[
+d_{MO}=\frac{1}{2}\sqrt{x^2+y^2}
+\]
+
+\[
+\boxed{d_{MO}=\frac{L}{2}}
+\]
+
+Resposta: alternativa A.
+
+\subsection{Questão 10 -- Lançamento vertical}
+
+No ponto de altura máxima:
+\[
+v=0
+\]
+
+Entretanto:
+\[
+a=-g
+\]
+
+A aceleração permanece orientada para baixo.
+
+Resposta: alternativa C.
+
+\newpage
+\section{Parte II -- Problemas}
+
+\subsection{Problema 1 -- Gráficos do movimento}
+
+A aceleração média é:
+\[
+a_m=\frac{\Delta v}{\Delta t}
+\]
+
+De 0 a 1 minuto:
+\[
+a_m=\frac{12,5-0}{60}
+\]
+
+\[
+\boxed{a_m=0,2083\,\mathrm{m/s^2}}
+\]
+
+De 2 a 3 minutos:
+\[
+a_m=\frac{0-12,5}{60}
+\]
+
+\[
+\boxed{a_m=-0,2083\,\mathrm{m/s^2}}
+\]
+
+A distância total é obtida pela soma das áreas sob o gráfico:
+\[
+\boxed{\Delta s=3,375\,\mathrm{km}}
+\]
+
+\subsection{Problema 2 -- Malabarismo}
+
+Altura máxima:
+\[
+h=2\,\mathrm{m}
+\]
+
+Velocidade inicial:
+\[
+v_0=\sqrt{2gh}
+\]
+
+\[
+v_0=\sqrt{2(10)(2)}
+\]
+
+\[
+\boxed{v_0=6,32\,\mathrm{m/s}}
+\]
+
+Tempo de subida:
+\[
+t_s=\frac{v_0}{g}
+\]
+
+\[
+\boxed{t_s=0,632\,\mathrm{s}}
+\]
+
+Tempo total de voo:
+\[
+t_v=2t_s
+\]
+
+\[
+\boxed{t_v=1,264\,\mathrm{s}}
+\]
+
+Intervalo entre lançamentos:
+\[
+\boxed{\Delta t=0,632\,\mathrm{s}}
+\]
+
+\subsection{Problema 3 -- Caçador e macaco}
+
+Movimento da bala:
+\[
+x_b=v_0\cos\theta\,t
+\]
+
+\[
+y_b=v_0\sin\theta\,t-\frac{gt^2}{2}
+\]
+
+Movimento do macaco:
+\[
+x_m=d
+\]
+
+\[
+y_m=h-\frac{gt^2}{2}
+\]
+
+Condição horizontal do encontro:
+\[
+v_0\cos\theta\,t=d
+\]
+
+\[
+t=\frac{d}{v_0\cos\theta}
+\]
+
+Como:
+\[
+\tan\theta=\frac{h}{d}
+\]
+
+Temos:
+\[
+\cos\theta=\frac{d}{\sqrt{d^2+h^2}}
+\]
+
+Logo:
+\[
+\boxed{
+t=\frac{\sqrt{d^2+h^2}}{v_0}
+}
+\]
+
+Na direção vertical:
+\[
+y_b=d\tan\theta-\frac{gt^2}{2}
+\]
+
+\[
+y_b=h-\frac{gt^2}{2}
+\]
+
+Portanto:
+\[
+\boxed{y_b=y_m}
+\]
+
+A bala atinge o macaco porque ambos apresentam
+o mesmo deslocamento vertical devido à gravidade.
+
+\end{document}
