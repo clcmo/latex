@@ -1,126 +1,51 @@
-# 📄 LaTeX Site — GitHub Pages
+<!-- Generated from content/pt-br.md; edit the source file. -->
 
-Sistema para publicar documentos LaTeX como páginas web, com opção de download em PDF.  
-**Escreva `.tex` → faça push → o site atualiza automaticamente.**
+🇧🇷 Português | [English](README.en.md)
 
----
+# LaTeX Site — Publicação de documentos
 
-## 🚀 Configuração Inicial (5 minutos)
+Site para compilar e publicar documentos LaTeX como PDFs no GitHub Pages.
 
-### 1. Crie o repositório no GitHub
+## Como funciona
 
-```bash
-# Clone ou faça upload desta pasta para um repositório no GitHub
-git init
-git add .
-git commit -m "feat: initial latex site setup"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/SEU-REPO.git
-git push -u origin main
+Os documentos `.tex` ficam em `src/`, organizados por categoria. O GitHub Actions
+compila cada documento e publica os PDFs e um índice navegável.
+
+## Estrutura
+
+```text
+assets/
+  css/                 Estilos do site
+  js/                  Comportamentos do site
+  python/              Geradores do índice e dos READMEs
+content/
+  en.md                Fonte do README em inglês
+  pt-br.md             Fonte deste README
+src/
+  articles/            Artigos e textos
+  cv/                  Currículos
+  math/                Notas matemáticas
+  slides/              Apresentações Beamer
+templates/             Templates HTML do site
+scripts/build.sh       Build local e de CI
 ```
 
-### 2. Ative o GitHub Pages
+## Adicionar um documento
 
-1. Vá em **Settings → Pages** no seu repositório
-2. Em **Source**, selecione **GitHub Actions**
-3. Salve
+1. Crie um `.tex` em `src/articles/`, `src/cv/`, `src/math/` ou `src/slides/`.
+2. Se possível, declare `\title{Título do documento}` para exibir o título no
+   índice.
+3. Execute `bash scripts/build.sh` e confira o resultado em `site/`.
 
-### 3. Pronto! 🎉
+O build requer Python 3 e `pdflatex` (TeX Live).
 
-Na próxima vez que fizer push na branch `main`, o site será compilado e publicado em:
-```
-https://SEU-USUARIO.github.io/SEU-REPO/
-```
+## Publicar no GitHub Pages
 
----
+Configure **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+Pushes e pull requests para `main` compilam os documentos; pushes para `main`
+publicam o site.
 
-## 📁 Estrutura do Projeto
+## Atualizar os READMEs
 
-```
-.
-├── content/
-│   ├── articles/     ← Artigos científicos e textos
-│   ├── cv/           ← Currículo / CV
-│   ├── slides/       ← Apresentações Beamer
-│   └── math/         ← Notas matemáticas
-├── templates/
-│   └── page.html     ← Template HTML das páginas
-├── scripts/
-│   ├── build.sh      ← Script de compilação principal
-│   └── generate_index.py ← Gera a página inicial
-└── .github/
-    └── workflows/
-        └── build.yml ← Automação GitHub Actions
-```
-
----
-
-## ✍️ Como adicionar documentos
-
-1. Crie um arquivo `.tex` na pasta correta:
-   ```
-   content/articles/meu-artigo.tex
-   content/cv/meu-cv.tex
-   content/slides/minha-apresentacao.tex
-   content/math/minhas-notas.tex
-   ```
-
-2. Inclua `\title{Título do Documento}` no arquivo `.tex`
-
-3. Faça push:
-   ```bash
-   git add content/articles/meu-artigo.tex
-   git commit -m "add: artigo sobre X"
-   git push
-   ```
-
-4. Aguarde ~3 minutos para o Actions compilar e publicar.
-
----
-
-## 🔧 Tecnologias
-
-| Ferramenta | Função |
-|---|---|
-| **GitHub Actions** | Automação: compila ao fazer push |
-| **TeX Live** | Compilação `.tex` → PDF |
-| **Pandoc** | Conversão `.tex` → HTML |
-| **MathJax** | Renderização de fórmulas no browser |
-| **GitHub Pages** | Hospedagem gratuita |
-
----
-
-## 📐 Fórmulas matemáticas
-
-As fórmulas são renderizadas pelo MathJax diretamente no browser:
-
-- **Inline:** `$E = mc^2$`
-- **Display:** `$$\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}$$`
-
-Não é necessária nenhuma configuração extra — funciona automaticamente.
-
----
-
-## 💡 Dicas
-
-- Use `\title{}`, `\author{}` e `\date{}` nos seus documentos para que apareçam nas páginas
-- PDFs são gerados automaticamente e ficam disponíveis para download em cada página
-- O índice (`index.html`) é gerado automaticamente listando todos os documentos
-- Documentos com erros de compilação ainda geram HTML via Pandoc (best-effort)
-
----
-
-## 🛠 Desenvolvimento local
-
-Para testar localmente antes de fazer push:
-
-```bash
-# Instalar dependências (Ubuntu/Debian)
-sudo apt-get install texlive-full pandoc python3
-
-# Compilar
-bash scripts/build.sh
-
-# Ver resultado
-open site/index.html
-```
+Edite `content/pt-br.md` e `content/en.md`. O build gera `README.md` e
+`README.en.md` a partir desses arquivos.

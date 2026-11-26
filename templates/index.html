@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Biblioteca LaTeX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/site.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Biblioteca LaTeX</h1>
+    <p>Documentos compilados automaticamente</p>
+    <nav class="site-nav">
+      {nav_links}
+    </nav>
+  </header>
+  <main class="index-main">
+    {sections}
+  </main>
+  <footer class="site-footer">
+    Gerado em {date} · LaTeX + GitHub Actions + GitHub Pages
+  </footer>
+</body>
+</html>

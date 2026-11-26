@@ -1,94 +1,126 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ---------------------------------------------------------------------------
-# build.sh — Compila todos os .tex em content/ e monta o site em site/
-# ---------------------------------------------------------------------------
+# build.sh — compila os documentos LaTeX e gera o site e os READMEs.
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONTENT_DIR="$REPO_ROOT/content"
+SOURCE_DIR="$REPO_ROOT/src"
 SITE_DIR="$REPO_ROOT/site"
-SCRIPTS_DIR="$REPO_ROOT/scripts"
+PYTHON_DIR="$REPO_ROOT/assets/python"
+CATEGORIES="articles cv slides math"
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+COMPILE_FAILURES=0
 
-CATEGORIES=("articles" "cv" "slides" "math")
+command -v pdflatex >/dev/null || {
+  echo "Erro: pdflatex não encontrado."
+  exit 1
+}
+command -v python3 >/dev/null || {
+  echo "Erro: python3 não encontrado."
+  exit 1
+}
 
 echo "==> Criando estrutura do site..."
-mkdir -p "$SITE_DIR"
-for cat in "${CATEGORIES[@]}"; do
+rm -rf "$SITE_DIR"
+mkdir -p "$SITE_DIR/assets"
+cp -R "$REPO_ROOT/assets/css" "$SITE_DIR/assets/"
+cp -R "$REPO_ROOT/assets/js" "$SITE_DIR/assets/"
+
+echo "==> Gerando READMEs..."
+python3 "$PYTHON_DIR/build_readme.py"
+
+for cat in $CATEGORIES; do
   mkdir -p "$SITE_DIR/$cat"
+  : > "$TMP_DIR/$cat.tsv"
 done
 
-# ---------------------------------------------------------------------------
-# Compila cada .tex encontrado
-# ---------------------------------------------------------------------------
-declare -A COMPILED_DOCS  # categoria -> lista de "titulo|arquivo.pdf"
-
-for cat in "${CATEGORIES[@]}"; do
-  SRC_DIR="$CONTENT_DIR/$cat"
+echo "==> Compilando documentos..."
+for cat in $CATEGORIES; do
+  SRC_DIR="$SOURCE_DIR/$cat"
   OUT_DIR="$SITE_DIR/$cat"
-
   [[ -d "$SRC_DIR" ]] || continue
 
   while IFS= read -r -d '' texfile; do
     filename="$(basename "$texfile" .tex)"
-    echo "  -> Compilando: $cat/$filename.tex"
+    echo "  -> $cat/$filename.tex"
 
-    # Compila duas vezes para resolver referências cruzadas
     if pdflatex \
         -interaction=nonstopmode \
         -halt-on-error \
         -output-directory="$OUT_DIR" \
-        "$texfile" > /dev/null 2>&1 && \
+        "$texfile" >/dev/null 2>&1 &&
        pdflatex \
         -interaction=nonstopmode \
         -halt-on-error \
         -output-directory="$OUT_DIR" \
-        "$texfile" > /dev/null 2>&1; then
+        "$texfile" >/dev/null 2>&1; then
 
-      # Extrai título do .tex (primeira ocorrência de \title{...})
-      title=$(grep -m1 '\\title{' "$texfile" \
-              | sed 's/.*\\title{\(.*\)}/\1/' \
-              | sed 's/\\\\/ /g' \
-              | tr -d '{}' \
-              | xargs)
-      [[ -z "$title" ]] && title="$filename"
+      title="$({ grep -m1 '\\title{' "$texfile" || true; } |
+        sed 's/.*\\title{\(.*\)}/\1/' |
+        sed 's/\\\\/ /g' |
+        tr -d '{}' |
+        xargs)"
+      [[ -n "$title" ]] || title="$filename"
+      printf '%s\t%s\n' "$title" "$filename.pdf" >> "$TMP_DIR/$cat.tsv"
 
-      # Acumula para o index
-      COMPILED_DOCS["$cat"]+="${title}|${filename}.pdf"$'\n'
-
-      # Remove arquivos auxiliares, mantém só o PDF
-      rm -f "$OUT_DIR/$filename".{aux,log,out,toc,lof,lot,nav,snm,vrb}
-
+      rm -f "$OUT_DIR/$filename.aux" "$OUT_DIR/$filename.log" \
+        "$OUT_DIR/$filename.out" "$OUT_DIR/$filename.toc" \
+        "$OUT_DIR/$filename.lof" "$OUT_DIR/$filename.lot" \
+        "$OUT_DIR/$filename.nav" "$OUT_DIR/$filename.snm" \
+        "$OUT_DIR/$filename.vrb"
       echo "     OK: $filename.pdf"
     else
-      echo "     ERRO ao compilar $cat/$filename.tex — pulando"
+      echo "     ERRO: $cat/$filename.tex"
+      COMPILE_FAILURES=$((COMPILE_FAILURES + 1))
+      rm -f "$OUT_DIR/$filename.aux" "$OUT_DIR/$filename.log" \
+        "$OUT_DIR/$filename.out" "$OUT_DIR/$filename.toc" \
+        "$OUT_DIR/$filename.lof" "$OUT_DIR/$filename.lot" \
+        "$OUT_DIR/$filename.nav" "$OUT_DIR/$filename.snm" \
+        "$OUT_DIR/$filename.vrb"
     fi
   done < <(find "$SRC_DIR" -maxdepth 1 -name "*.tex" -print0 | sort -z)
 done
 
-# ---------------------------------------------------------------------------
-# Gera o index.html via script Python
-# ---------------------------------------------------------------------------
 echo "==> Gerando index.html..."
+python3 - "$TMP_DIR" "$SITE_DIR/index.html" "$PYTHON_DIR/generate_index.py" \
+  "$REPO_ROOT/templates/index.html" <<'PY'
+import json
+import pathlib
+import subprocess
+import sys
 
-# Serializa os docs compilados como JSON para passar ao Python
-DOCS_JSON="{"
-for cat in "${CATEGORIES[@]}"; do
-  DOCS_JSON+="\"$cat\": ["
-  while IFS='|' read -r title pdffile; do
-    [[ -z "$title" ]] && continue
-    # Escapa aspas duplas
-    title="${title//\"/\\\"}"
-    DOCS_JSON+="{\"title\": \"$title\", \"file\": \"$pdffile\"},"
-  done <<< "${COMPILED_DOCS[$cat]:-}"
-  # Remove trailing comma e fecha array
-  DOCS_JSON="${DOCS_JSON%,}],"
-done
-DOCS_JSON="${DOCS_JSON%,}}"
+tmp_dir = pathlib.Path(sys.argv[1])
+output = sys.argv[2]
+generator = sys.argv[3]
+template = sys.argv[4]
 
-python3 "$SCRIPTS_DIR/generate_index.py" \
-  --output "$SITE_DIR/index.html" \
-  --template "$REPO_ROOT/templates/page.html" \
-  --docs "$DOCS_JSON"
+docs = {}
+for category in ("articles", "cv", "slides", "math"):
+    items = []
+    for line in (tmp_dir / f"{category}.tsv").read_text(encoding="utf-8").splitlines():
+        title, pdf_file = line.split("\t", 1)
+        items.append({"title": title, "file": pdf_file})
+    docs[category] = items
+
+subprocess.run(
+    [
+        sys.executable,
+        generator,
+        "--output",
+        output,
+        "--template",
+        template,
+        "--docs",
+        json.dumps(docs, ensure_ascii=False),
+    ],
+    check=True,
+)
+PY
+
+if [[ "$COMPILE_FAILURES" -gt 0 ]]; then
+  echo "==> Build concluído com $COMPILE_FAILURES erro(s)."
+  exit 1
+fi
 
 echo "==> Build concluído! Arquivos em: $SITE_DIR"
