@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Instalar TeX Live
         run: |
@@ -36,7 +36,7 @@ jobs:
           test -s README.en.md
 
       - name: Publicar artefato para GitHub Pages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: generated-site
           path: site/
