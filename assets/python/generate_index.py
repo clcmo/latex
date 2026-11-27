@@ -1,86 +1,97 @@
 #!/usr/bin/env python3
-"""Generate the document index from the HTML template and compiled PDFs."""
+"""Gera o índice do site, agrupado por tema, a partir do template HTML."""
 
 import argparse
 import html
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import quote
 
-CATEGORY_META = {
-    "articles": {"label": "Artigos", "icon": "📄", "anchor": "articles"},
-    "cv": {"label": "Currículo", "icon": "👤", "anchor": "cv"},
-    "slides": {"label": "Slides", "icon": "🖥️", "anchor": "slides"},
-    "math": {"label": "Matemática", "icon": "∑", "anchor": "math"},
-}
-CATEGORIES_ORDER = ("articles", "cv", "slides", "math")
+from site_data import carregar_temas, coletar_docs
 
 
-def build_nav() -> str:
+def agrupar(docs: list, temas: dict) -> dict:
+    grupos = {slug: [] for slug in temas["ordem"]}
+    for doc in docs:
+        grupos[doc["tema"]].append(doc)
+    return {slug: itens for slug, itens in grupos.items() if itens}
+
+
+def build_nav(grupos: dict, temas: dict) -> str:
     return "\n      ".join(
-        f'<a href="#{CATEGORY_META[category]["anchor"]}">'
-        f'{CATEGORY_META[category]["icon"]} {CATEGORY_META[category]["label"]}</a>'
-        for category in CATEGORIES_ORDER
+        f'<a href="#{slug}" data-tema="{slug}">{html.escape(temas["temas"][slug]["nome"])}</a>'
+        for slug in grupos
     )
 
 
-def build_sections(docs: dict) -> str:
-    sections = []
-    for category in CATEGORIES_ORDER:
-        meta = CATEGORY_META[category]
-        items = docs.get(category, [])
-        if items:
-            rows = []
-            for item in items:
-                title = html.escape(item["title"])
-                filename = quote(item["file"], safe="")
-                rows.append(
-                    f'<li class="doc-item"><span class="doc-title">{title}</span>'
-                    f'<a class="doc-link" href="{category}/{filename}" '
-                    f'target="_blank" rel="noopener">Baixar PDF</a></li>'
-                )
-            content = '<ul class="doc-list">\n' + "\n".join(rows) + "\n</ul>"
-        else:
-            content = (
-                '<p class="empty">Nenhum documento publicado. Adicione arquivos '
-                f'<code>.tex</code> em <code>src/{category}/</code>.</p>'
-            )
+def build_item(doc: dict, tipos: dict) -> str:
+    nome = quote(doc["nome"], safe="")
+    tipo = doc["tipo"]
+    links = [f'<a class="doc-link primary" href="{tipo}/ver/{nome}.html">Abrir</a>']
+    links.append(f'<a class="doc-link" href="{tipo}/{nome}.pdf" target="_blank" rel="noopener">PDF</a>')
+    if doc["tem_html"]:
+        links.append(f'<a class="doc-link" href="{tipo}/html/{nome}.html">HTML</a>')
+    return (
+        f'<li class="doc-item"><div><span class="doc-title">{html.escape(doc["titulo"])}</span>'
+        f'<span class="doc-tipo">{html.escape(tipos.get(tipo, tipo))}</span></div>'
+        f'<span class="doc-links">{"".join(links)}</span></li>'
+    )
 
-        sections.append(
-            f'<section class="index-section" id="{meta["anchor"]}">'
-            f'<h2>{meta["icon"]} {meta["label"]}</h2>\n{content}\n</section>'
+
+def build_sections(grupos: dict, temas: dict) -> str:
+    if not grupos:
+        return (
+            '<p class="empty">Nenhum documento publicado. Adicione arquivos '
+            "<code>.tex</code> em <code>src/</code>.</p>"
         )
-    return "\n".join(sections)
+    secoes = []
+    for slug, itens in grupos.items():
+        tema = temas["temas"][slug]
+        lista = "\n".join(build_item(doc, temas["tipos"]) for doc in itens)
+        secoes.append(
+            f'<section class="index-section" id="{slug}" data-tema="{slug}">'
+            f'<h2>{html.escape(tema["nome"])}</h2>'
+            f'<p class="tema-desc">{html.escape(tema["descricao"])}</p>\n'
+            f'<ul class="doc-list">\n{lista}\n</ul>\n</section>'
+        )
+    return "\n".join(secoes)
+
+
+def build_slides(grupos: dict, temas: dict) -> str:
+    slides = []
+    for slide in temas["apresentacao"]:
+        if slide.get("especial") == "temas":
+            itens = [
+                f'{temas["temas"][slug]["nome"]}: {temas["temas"][slug]["descricao"]} ({len(docs)})'
+                for slug, docs in grupos.items()
+            ]
+            slide = {"titulo": slide["titulo"], "itens": itens}
+        slides.append(slide)
+    return json.dumps(slides, ensure_ascii=False).replace("</", "<\\/")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", required=True, help="Generated index HTML path")
-    parser.add_argument("--template", required=True, help="HTML template path")
-    parser.add_argument("--docs", required=True, help="JSON document metadata")
+    parser.add_argument("--site", required=True, help="Pasta do site gerado")
+    parser.add_argument("--output", required=True, help="Caminho do index.html")
+    parser.add_argument("--template", required=True, help="Template index.html")
     args = parser.parse_args()
 
-    docs = json.loads(args.docs)
-    for category in docs:
-        docs[category] = [
-            item
-            for item in docs[category]
-            if item.get("title") and item.get("file")
-        ]
+    temas = carregar_temas()
+    grupos = agrupar(coletar_docs(Path(args.site)), temas)
+    modelo = Path(args.template).read_text(encoding="utf-8")
 
-    with open(args.template, encoding="utf-8") as template_file:
-        template = template_file.read()
-
-    output = (
-        template.replace("{nav_links}", build_nav())
-        .replace("{sections}", build_sections(docs))
+    saida = (
+        modelo.replace("{descricao}", html.escape(temas["projeto"]["descricao"]))
+        .replace("{nav_links}", build_nav(grupos, temas))
+        .replace("{sections}", build_sections(grupos, temas))
+        .replace("{slides_json}", build_slides(grupos, temas))
         .replace("{date}", datetime.now().strftime("%d/%m/%Y %H:%M"))
     )
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
-    with open(args.output, "w", encoding="utf-8") as output_file:
-        output_file.write(output)
-
+    Path(args.output).write_text(saida, encoding="utf-8")
     print(f"index.html gerado em: {args.output}")
 
 

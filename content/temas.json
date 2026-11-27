@@ -1,0 +1,22 @@
+{
+  "projeto": {
+    "titulo": "Biblioteca LaTeX",
+    "descricao": "Aulas e estudos escritos em LaTeX, publicados em PDF e em HTML. Escolha um tema, leia no formato que preferir ou compare os dois lado a lado."
+  },
+  "tipos": {"articles": "Artigo", "cv": "Currículo", "slides": "Slides", "math": "Notas"},
+  "padrao_por_tipo": {"articles": "publicacoes", "cv": "publicacoes", "slides": "publicacoes", "math": "matematica"},
+  "ordem": ["matematica", "fisica", "mobile", "publicacoes"],
+  "temas": {
+    "matematica": {"nome": "Matemática", "descricao": "Cálculo, álgebra linear e notas de estudo.", "cor": "#7eb8c8"},
+    "fisica": {"nome": "Física", "descricao": "Mecânica, apostilas e relatórios.", "cor": "#b79cf0"},
+    "mobile": {"nome": "Desenvolvimento mobile", "descricao": "Arquitetura e ciclo de vida de apps.", "cor": "#6fcf9f"},
+    "publicacoes": {"nome": "Publicações", "descricao": "Artigos, slides e currículo.", "cor": "#c8a96e"}
+  },
+  "apresentacao": [
+    {"titulo": "Biblioteca LaTeX", "texto": "Estudos e aulas em um só lugar, para ler no PDF ou na tela."},
+    {"titulo": "O problema", "itens": ["PDFs soltos são difíceis de encontrar.", "No celular, o PDF é pequeno demais para estudar.", "Para copiar uma fórmula, é preciso abrir o código-fonte."]},
+    {"titulo": "A solução", "texto": "Cada aula vira dois formatos a partir do mesmo .tex: o PDF para imprimir e uma página HTML com a matemática renderizada."},
+    {"titulo": "Temas", "especial": "temas"},
+    {"titulo": "Como publicar", "itens": ["Crie o .tex na pasta do tipo, em src/.", "Indique o tema no topo do arquivo: % tema: fisica", "Envie para a main: o GitHub Actions compila e publica o site."]}
+  ]
+}

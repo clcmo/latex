@@ -1,4 +1,9 @@
 (() => {
+  if (new URLSearchParams(location.search).has("embed"))
+    document.body.classList.add("embed");
+})();
+
+(() => {
   const toc = document.getElementById("toc");
   if (!toc) return;
 
@@ -18,12 +23,15 @@
 
   if (!("IntersectionObserver" in window)) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const link = toc.querySelector(`a[href="#${entry.target.id}"]`);
-      if (link) link.classList.toggle("active", entry.isIntersecting);
-    });
-  }, { rootMargin: "-60px 0px -80% 0px" });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = toc.querySelector(`a[href="#${entry.target.id}"]`);
+        if (link) link.classList.toggle("active", entry.isIntersecting);
+      });
+    },
+    { rootMargin: "-60px 0px -80% 0px" },
+  );
 
   headings.forEach((heading) => observer.observe(heading));
 })();

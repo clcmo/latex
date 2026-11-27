@@ -1,0 +1,233 @@
+/* Interface por temas: índice, apresentação e visualizador.
+   A cor de cada tema vem de themes.css (gerado de content/temas.json). */
+:root {
+  --tema: var(--gold);
+}
+[hidden] {
+  display: none !important;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--tema);
+  outline-offset: 2px;
+}
+
+/* Índice */
+.site-nav a[data-tema] {
+  color: var(--tema);
+  border-color: color-mix(in srgb, var(--tema) 40%, transparent);
+}
+.site-nav a[data-tema]:hover {
+  background: color-mix(in srgb, var(--tema) 14%, transparent);
+}
+.hero {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 0;
+}
+.hero p {
+  color: var(--muted);
+  font-size: 1.25rem;
+  max-width: 62ch;
+  margin-bottom: 1rem;
+}
+.btn-apresentar,
+.deck-bar button {
+  background: none;
+  color: var(--tema);
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid var(--tema);
+  padding: 0.4rem 1rem;
+  font:
+    600 0.8rem "JetBrains Mono",
+    monospace;
+}
+.btn-apresentar,
+.deck-bar button.primary {
+  background: var(--tema);
+  color: #0d0d0f;
+}
+.deck-bar button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.index-section[data-tema] {
+  border-left: 4px solid var(--tema);
+  padding-left: 1.2rem;
+}
+.index-section[data-tema] h2 {
+  color: var(--tema);
+  border-bottom-color: color-mix(in srgb, var(--tema) 35%, var(--border));
+}
+.tema-desc {
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+.doc-tipo {
+  margin-left: 0.7rem;
+  color: var(--muted);
+  font:
+    0.75rem "JetBrains Mono",
+    monospace;
+}
+.doc-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.doc-link {
+  border-color: color-mix(in srgb, var(--tema) 40%, transparent);
+}
+.doc-link.primary {
+  background: var(--tema);
+  border-color: var(--tema);
+  color: #0d0d0f;
+}
+
+/* Apresentação */
+.deck {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.slide {
+  flex: 1;
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  padding: 6vw;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide h2 {
+  color: var(--tema);
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  line-height: 1.15;
+  margin-bottom: 0.5em;
+}
+.slide p,
+.slide li {
+  font-size: clamp(1.15rem, 2.4vw, 1.8rem);
+  line-height: 1.5;
+  margin: 0.3em 0;
+}
+.slide ul {
+  padding-left: 1.2em;
+}
+.deck-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1.2rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+}
+
+/* Visualizador */
+.tema-chip {
+  color: var(--tema);
+  border: 1px solid color-mix(in srgb, var(--tema) 45%, transparent);
+  border-radius: 3px;
+  padding: 0.1rem 0.6rem;
+  font:
+    0.72rem "JetBrains Mono",
+    monospace;
+  white-space: nowrap;
+}
+.modos {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.modos button {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.35rem 0.8rem;
+  font:
+    600 0.75rem "JetBrains Mono",
+    monospace;
+}
+.modos button + button {
+  border-left: 1px solid var(--border);
+}
+.modos button[aria-pressed="true"] {
+  background: var(--tema);
+  color: #0d0d0f;
+}
+.viewer-page {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.viewer {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.painel {
+  min-width: 0;
+  min-height: 0;
+}
+.painel + .painel {
+  border-left: 3px solid var(--tema);
+}
+.painel iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+.painel-html iframe {
+  background: var(--bg);
+  color-scheme: dark;
+}
+.viewer[data-modo="pdf"],
+.viewer[data-modo="html"] {
+  grid-template-columns: 1fr;
+}
+.viewer[data-modo="pdf"] .painel-html,
+.viewer[data-modo="html"] .painel-pdf {
+  display: none;
+}
+.viewer[data-html="0"] .painel-html {
+  display: none;
+}
+.viewer[data-html="0"] {
+  grid-template-columns: 1fr;
+}
+body.embed .topbar {
+  display: none;
+}
+@media (max-width: 860px) {
+  .viewer {
+    grid-template-columns: 1fr;
+  }
+  .viewer[data-modo="split"] .painel-pdf {
+    display: none;
+  }
+  .modos button[data-modo="split"] {
+    display: none;
+  }
+  .topbar {
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .topbar .doc-title,
+  .topbar .sep {
+    display: none;
+  }
+}
