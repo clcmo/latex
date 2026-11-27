@@ -7,7 +7,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCE_DIR="$REPO_ROOT/src"
 SITE_DIR="$REPO_ROOT/site"
 PYTHON_DIR="$REPO_ROOT/assets/python"
-CATEGORIES="articles cv slides math"
+CATEGORIES="articles cv slides notes books"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 COMPILE_FAILURES=0
