@@ -9,10 +9,11 @@ labels: ["documento", "pt-br", "document"]
 
 ## Categoria
 
-- [ ] `articles`: Artigo
-- [ ] `cv`: Currículo
+- [ ] `articles`: Artigos
+- [ ] `cv`: Currículos
 - [ ] `slides`: Slides
 - [ ] `math`: Notas
+- [ ] `books`: Apostilas
 
 ## Tema
 
