@@ -9,10 +9,11 @@ labels: ["documento", "en", "document"]
 
 ## Category
 
-- [ ] `articles`: Article
+- [ ] `articles`: Articles
 - [ ] `cv`: Resume
 - [ ] `slides`: Slides
 - [ ] `math`: Notes
+- [ ] `books`: Books
 
 ## Theme
 
