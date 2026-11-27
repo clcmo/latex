@@ -2,25 +2,42 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Biblioteca LaTeX</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/css/site.css"/>
+  <link rel="stylesheet" href="assets/css/themes.css"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
 </head>
 <body>
   <header class="site-header">
     <h1>Biblioteca LaTeX</h1>
     <p>Documentos compilados automaticamente</p>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Temas">
       {nav_links}
     </nav>
   </header>
+  <section class="hero">
+    <p>{descricao}</p>
+    <button type="button" class="btn-apresentar" data-apresentar>Apresentar projeto</button>
+  </section>
   <main class="index-main">
     {sections}
   </main>
   <footer class="site-footer">
     Gerado em {date} · LaTeX + GitHub Actions + GitHub Pages
   </footer>
+
+  <div class="deck" id="deck" role="dialog" aria-modal="true" aria-label="Apresentação do projeto" hidden>
+    <div class="slide"></div>
+    <div class="deck-bar">
+      <button type="button" data-fechar>Fechar</button>
+      <span class="contagem" aria-live="polite"></span>
+      <span><button type="button" data-ant>Anterior</button> <button type="button" class="primary" data-prox>Próximo</button></span>
+    </div>
+  </div>
+  <script type="application/json" id="slides-data">{slides_json}</script>
+  <script src="assets/js/apresentacao.js"></script>
 </body>
 </html>

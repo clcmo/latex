@@ -1,0 +1,338 @@
+% tema: fisica
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.2cm]{geometry}
+\usepackage{fontspec}
+\usepackage[portuguese, english, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{english}
+\babelfont{rm}{Noto Sans}
+\usepackage{enumitem}
+\setlist[itemize]{label=-}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+
+\definecolor{primary}{HTML}{1E3A5F}
+\definecolor{accent}{HTML}{2B6CB0}
+\definecolor{muted}{HTML}{4A5568}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    pdftitle={Gabarito Completo - Listas de Exercícios de Física}
+}
+
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{\color{primary} Resolução Comentada --- Listas de Exercícios de Física}} \\[4pt]
+    {\small \color{muted} Cinemática Unidimensional, Lançamentos e Dinâmica (Leis de Newton)}
+\end{center}
+
+\vspace{4pt}
+\hrule
+\vspace{8pt}
+
+\section*{\color{primary} Parte I --- Lista de Exercícios (\texttt{lista\_exercicios.pdf})}
+
+\subsection*{Exercício 1}
+\textbf{Dados:} $x_{0A} = 0$, $x_{0B} = 20\text{ m}$, $v_{0A} = 15\text{ m/s}$, $v_B = 15\text{ m/s}$ (constante) e $a_A = 0{,}40\text{ m/s}^2$.
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Funções horárias da posição:}
+    \begin{itemize}
+        \item Ciclista A (MRUV): $x_A(t) = 15t + 0{,}20t^2$ (com $x_A$ em $\text{m}$ e $t$ em $\text{s}$).
+        \item Ciclista B (MRU): $x_B(t) = 20 + 15t$ (com $x_B$ em $\text{m}$ e $t$ em $\text{s}$).
+    \end{itemize}
+
+    \item \textbf{Instante da ultrapassagem:}
+    Igualando as funções horárias ($x_A(t) = x_B(t)$):
+    \[
+        15t + 0{,}20t^2 = 20 + 15t \implies 0{,}20t^2 = 20 \implies t^2 = 100 \implies t = 10\text{ s}
+    \]
+
+    \item \textbf{Velocidade de A no instante da ultrapassagem:}
+    \[
+        v_A(10) = v_{0A} + a_A t = 15 + 0{,}40 \cdot 10 = 19\text{ m/s}
+    \]
+
+    \item \textbf{Distância entre A e B após $30\text{ s}$ da ultrapassagem:}
+    A partir de $t = 10\text{ s}$, ambos mantêm velocidades constantes ($v_A = 19\text{ m/s}$ e $v_B = 15\text{ m/s}$):
+    \[
+        \Delta d = (v_A - v_B)\,\Delta t = (19 - 15) \cdot 30 = 4 \cdot 30 = 120\text{ m}
+    \]
+\end{enumerate}
+
+\subsection*{Exercício 2}
+\textbf{Conversões iniciais:}
+\begin{itemize}
+    \item Percurso total: $2{,}4\text{ km} = 2400\text{ m}$.
+    \item Velocidade máxima: $v_{\text{máx}} = \dfrac{350}{3{,}6}\text{ m/s} = \dfrac{875}{9}\text{ m/s} \approx 97{,}2\text{ m/s}$.
+    \item Velocidade final: $v_f = \dfrac{100}{3{,}6}\text{ m/s} = \dfrac{250}{9}\text{ m/s} \approx 27{,}8\text{ m/s}$.
+\end{itemize}
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Aceleração $a_1$ nos primeiros $900\text{ m}$:}
+    \[
+        v_{\text{máx}}^2 = 0^2 + 2\,a_1\,\Delta x_1 \implies a_1 = \frac{(875/9)^2}{2 \cdot 900} = \frac{30625}{5832}\text{ m/s}^2 \approx 5{,}25\text{ m/s}^2
+    \]
+
+    \item \textbf{Módulo de $a_2$ nos últimos $150\text{ m}$:}
+    \[
+        v_f^2 = v_{\text{máx}}^2 + 2\,a_2\,\Delta x_3 \implies |a_2| = \frac{(875/9)^2 - (250/9)^2}{2 \cdot 150} = \frac{3125}{108}\text{ m/s}^2 \approx 28{,}9\text{ m/s}^2
+    \]
+
+    \item \textbf{Tempo total para percorrer os $2{,}4\text{ km}$:}
+    \begin{itemize}
+        \item Trecho 1 ($\Delta x_1 = 900\text{ m}$): $\Delta t_1 = \dfrac{900}{\frac{0 + 875/9}{2}} = \dfrac{648}{35}\text{ s} \approx 18{,}51\text{ s}$.
+        \item Trecho 2 ($\Delta x_2 = 1350\text{ m}$): $\Delta t_2 = \dfrac{1350}{875/9} = \dfrac{486}{35}\text{ s} \approx 13{,}89\text{ s}$.
+        \item Trecho 3 ($\Delta x_3 = 150\text{ m}$): $\Delta t_3 = \dfrac{150}{\frac{875/9 + 250/9}{2}} = 2{,}4\text{ s}$.
+    \end{itemize}
+    \[
+        t_{\text{total}} = \frac{648 + 486}{35} + 2{,}4 = 32{,}4 + 2{,}4 = 34{,}8\text{ s}
+    \]
+\end{enumerate}
+
+\subsection*{Exercício 3}
+\textbf{Dados:} $v_x = \dfrac{72}{3{,}6} = 20\text{ m/s}$ (constante), $h = 40\text{ m}$ e $\theta = 8^\circ$.
+Adotando a origem no solo plano sob o drone em $t = 0$, a posição horizontal do drone é $x(t) = 20t$ (em $\text{m}$) e a altura da rampa nesse ponto é $y_{\text{rampa}}(t) = x(t)\tan 8^\circ$. A colisão ocorre quando $y_{\text{rampa}}(t) = h$:
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Instante da colisão:}
+    \[
+        20t \tan 8^\circ = 40 \implies t = \frac{2}{\tan 8^\circ} \approx \frac{2}{0{,}14054} \approx 14{,}2\text{ s}
+    \]
+
+    \item \textbf{Distância horizontal percorrida:}
+    \[
+        x = v_x \cdot t = 20 \cdot \frac{2}{\tan 8^\circ} = \frac{40}{\tan 8^\circ} \approx 285\text{ m}
+    \]
+
+    \item \textbf{Distância ao longo da encosta:}
+    \[
+        d = \frac{x}{\cos 8^\circ} = \frac{40}{\sin 8^\circ} \approx \frac{40}{0{,}13917} \approx 287\text{ m}
+    \]
+\end{enumerate}
+
+\subsection*{Exercício 4}
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Sentido do movimento nos pontos 1 e 4:}
+    \begin{itemize}
+        \item \textbf{Ponto 1:} $v(t) > 0$ ($\approx 205\text{ m/s}$), portanto move-se para a \textbf{direita}.
+        \item \textbf{Ponto 4:} $v(t) < 0$ ($\approx -30\text{ m/s}$), portanto move-se para a \textbf{esquerda}.
+    \end{itemize}
+
+    \item \textbf{Inversão do sentido do movimento:}
+    Apenas no \textbf{ponto 3}, pois é o único instante em que $v(t)$ muda de sinal (passa de positiva para negativa, invertendo o movimento da direita para a esquerda). No \textbf{ponto 5}, a curva apenas tangencia o eixo horizontal ($v = 0$) vinda de valores negativos e permanece negativa logo após.
+
+    \item \textbf{Ordem decrescente do módulo da aceleração ($|a| = |dv/dt|$):}
+    Corresponde ao módulo da inclinação da reta tangente à curva em cada ponto:
+    \[
+        \text{Ponto 2} > \text{Ponto 3} > \text{Ponto 5} > \text{Pontos 1 e 4} \quad (\text{nos picos e vales, } |a| \approx 0)
+    \]
+\end{enumerate}
+
+\subsection*{Exercício 5}
+\textbf{Dados:} $v_0 = 24\text{ m/s}$ (para cima) e $g = 10\text{ m/s}^2$ (para baixo).
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Altura máxima:}
+    \[
+        H_{\text{máx}} = \frac{v_0^2}{2g} = \frac{24^2}{2 \cdot 10} = \frac{576}{20} = 28{,}8\text{ m}
+    \]
+
+    \item \textbf{Tempo de subida até a altura máxima:}
+    \[
+        t_{\text{subida}} = \frac{v_0}{g} = \frac{24}{10} = 2{,}4\text{ s}
+    \]
+
+    \item \textbf{Tempo total de voo:}
+    \[
+        t_{\text{total}} = 2\,t_{\text{subida}} = 4{,}8\text{ s}
+    \]
+
+    \item \textbf{Velocidade imediatamente antes de atingir o solo (eixo positivo para cima):}
+    \[
+        v = -24\text{ m/s}
+    \]
+\end{enumerate}
+
+\subsection*{Exercício 6}
+Considerando $g = 10\text{ m/s}^2$ orientada para baixo (e eixo vertical positivo para cima):
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Velocidade no ponto mais alto:} $0\text{ m/s}$.
+    \item \textbf{Velocidade $1\text{ s}$ antes do ponto mais alto:} $+10\text{ m/s}$ (ou $10\text{ m/s}$ para cima).
+    \item \textbf{Variação da velocidade nesse intervalo de $1\text{ s}$:}
+    \[
+        \Delta \vec{v} = \vec{v}_{\text{topo}} - \vec{v}_{1\text{ s antes}} = 0 - 10 = -10\text{ m/s} \quad (\text{ou } 10\text{ m/s para baixo})
+    \]
+    \item \textbf{Velocidade $1\text{ s}$ depois do ponto mais alto:} $-10\text{ m/s}$ (ou $10\text{ m/s}$ para baixo).
+    \item \textbf{Variação da velocidade nesse intervalo de $1\text{ s}$:}
+    \[
+        \Delta \vec{v} = \vec{v}_{1\text{ s depois}} - \vec{v}_{\text{topo}} = -10 - 0 = -10\text{ m/s} \quad (\text{ou } 10\text{ m/s para baixo})
+    \]
+    \item \textbf{Variação da velocidade no intervalo total de $2\text{ s}$:}
+    \[
+        \Delta \vec{v} = -10 - (+10) = -20\text{ m/s} \quad (\text{ou } 20\text{ m/s para baixo})
+    \]
+    \item \textbf{Aceleração durante qualquer desses intervalos e no instante de velocidade nula:}
+    É constante e igual à aceleração da gravidade: $10\text{ m/s}^2$ para baixo (ou $-10\text{ m/s}^2$).
+\end{enumerate}
+
+\subsection*{Exercício 7}
+\textbf{Dados:} $h = 1{,}25\text{ m}$, $\Delta x = 7{,}5\text{ m}$, $v_{0y} = 0$ e $g = 10\text{ m/s}^2$.
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Tempo de permanência no ar:}
+    \[
+        h = \frac{1}{2} g t^2 \implies 1{,}25 = 5t^2 \implies t^2 = 0{,}25 \implies t = 0{,}5\text{ s}
+    \]
+
+    \item \textbf{Módulo da velocidade horizontal ao abandonar a plataforma:}
+    \[
+        v_x = \frac{\Delta x}{t} = \frac{7{,}5}{0{,}5} = 15\text{ m/s}
+    \]
+
+    \item \textbf{Módulo da componente vertical imediatamente antes do solo:}
+    \[
+        |v_y| = g\,t = 10 \cdot 0{,}5 = 5\text{ m/s}
+    \]
+
+    \item \textbf{Módulo da velocidade resultante no instante do pouso:}
+    \[
+        v = \sqrt{v_x^2 + v_y^2} = \sqrt{15^2 + 5^2} = \sqrt{250} = 5\sqrt{10}\text{ m/s} \approx 15{,}8\text{ m/s}
+    \]
+\end{enumerate}
+
+\subsection*{Exercício 8}
+\textbf{Dados:} $t = 4\text{ s}$, ângulo da velocidade final com a vertical igual a $45^\circ$ e $g = 10\text{ m/s}^2$.
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Módulo da velocidade horizontal do helicóptero:}
+    Como $|v_y| = g\,t = 10 \cdot 4 = 40\text{ m/s}$ e a direção final forma $45^\circ$ com a vertical:
+    \[
+        \tan 45^\circ = \frac{v_x}{|v_y|} \implies 1 = \frac{v_x}{40} \implies v_x = 40\text{ m/s}
+    \]
+
+    \item \textbf{Altitude do helicóptero em relação ao solo:}
+    \[
+        h = \frac{1}{2} g t^2 = \frac{1}{2} \cdot 10 \cdot 4^2 = 80\text{ m}
+    \]
+
+    \item \textbf{Distância horizontal percorrida durante a queda:}
+    \[
+        \Delta x = v_x \cdot t = 40 \cdot 4 = 160\text{ m}
+    \]
+
+    \item \textbf{Módulo da velocidade imediatamente antes de atingir o solo:}
+    \[
+        v = \sqrt{v_x^2 + v_y^2} = \sqrt{40^2 + 40^2} = 40\sqrt{2}\text{ m/s} \approx 56{,}6\text{ m/s}
+    \]
+\end{enumerate}
+
+\vspace{6pt}
+\hrule
+\vspace{8pt}
+
+\section*{\color{primary} Parte II --- Lista P2 (\texttt{lista\_p2.pdf})}
+
+\subsection*{Questão 1}
+No ponto mais alto da trajetória, desprezando a resistência do ar, atua sobre a bola \textbf{apenas a força peso} ($\vec{P}$), representada por uma seta vertical apontando \textbf{para baixo}. Embora a velocidade instantânea da bola seja nula nesse ponto, a atração gravitacional da Terra permanece atuando continuamente (após perder contato com a mão, não existe nenhuma força dirigida para cima).
+
+\subsection*{Questão 2}
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Durante a queda (antes do contato com o solo):}
+    A velocidade $\vec{v}$ aponta \textbf{para baixo}, a aceleração $\vec{a} = \vec{g}$ aponta \textbf{para baixo} e a força resultante $\vec{F}_{\text{res}} = \vec{P}$ aponta \textbf{para baixo} (movimento acelerado).
+
+    \item \textbf{Durante a subida (após perder contato com o solo):}
+    A velocidade $\vec{v}$ aponta \textbf{para cima}, enquanto a aceleração $\vec{a} = \vec{g}$ e a força resultante $\vec{F}_{\text{res}} = \vec{P}$ apontam \textbf{para baixo} (movimento retardado).
+\end{enumerate}
+
+\subsection*{Questão 3}
+Pela Segunda Lei de Newton, $F_{\text{res}} = m\,a \implies a = \dfrac{F_{\text{res}}}{m}$. Como o módulo de $F_{\text{res}}$ é idêntico para as três bolas:
+\begin{itemize}
+    \item Para $m_2 = \dfrac{m}{3}$:
+    \[
+        a_2 = \frac{F_{\text{res}}}{m/3} = 3\,\frac{F_{\text{res}}}{m} = 3\,a_1
+    \]
+    \item Para $m_3 = 3m$:
+    \[
+        a_3 = \frac{F_{\text{res}}}{3m} = \frac{1}{3}\,\frac{F_{\text{res}}}{m} = \frac{a_1}{3}
+    \]
+\end{itemize}
+
+\subsection*{Questão 4}
+Como o caminhão está em repouso (equilíbrio estático vertical), o módulo de seu peso é igual à soma das forças normais indicadas pelas três balanças:
+\[
+    P = N_1 + N_2 + N_3 = 36000\text{ N} + 24000\text{ N} + 12000\text{ N} = 72000\text{ N} \quad (\text{ou } 72\text{ kN})
+\]
+
+\subsection*{Questão 5}
+Como o barco desloca-se com velocidade constante, a força resultante sobre ele é nula ($\vec{F}_{\text{res}} = \vec{0}$). Na direção do rio, as componentes de $\vec{F}_1$ e $\vec{F}_2$ (com $F_1 = F_2$) equilibram a força da correnteza $F_c$:
+\[
+    2\,F_1 \cos\theta = F_c \implies 2\,F_1 \cdot 0{,}60 = 2{,}40 \times 10^4\text{ N} \implies 1{,}20\,F_1 = 24000\text{ N} \implies F_1 = 20000\text{ N} \quad (\text{ou } 2{,}0 \times 10^4\text{ N})
+\]
+
+\subsection*{Questão 6}
+Para o nó em equilíbrio estático, com $T_2 = 40\text{ N}$ na horizontal e o fio inclinado formando $30^\circ$ com a horizontal:
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Tração $T_1$ no fio inclinado (equilíbrio horizontal):}
+    \[
+        T_1 \cos 30^\circ = T_2 \implies T_1 \cdot \frac{\sqrt{3}}{2} = 40 \implies T_1 = \frac{80}{\sqrt{3}}\text{ N} = \frac{80\sqrt{3}}{3}\text{ N} \approx 46{,}2\text{ N}
+    \]
+
+    \item \textbf{Peso do bloco (equilíbrio vertical):}
+    \[
+        P = T_1 \sin 30^\circ = \frac{80}{\sqrt{3}} \cdot \frac{1}{2} = \frac{40}{\sqrt{3}}\text{ N} = \frac{40\sqrt{3}}{3}\text{ N} \approx 23{,}1\text{ N}
+    \]
+\end{enumerate}
+
+\subsection*{Questão 7}
+Calculando os pesos dos dois blocos ($g = 10\text{ m/s}^2$):
+\[
+    P_m = m\,g = 1{,}5 \cdot 10 = 15\text{ N} \qquad \text{e} \qquad P_M = M\,g = 5{,}5 \cdot 10 = 55\text{ N}
+\]
+No arranjo com roldana ideal (fio e polia sem massa e sem atrito):
+\begin{itemize}
+    \item Para manter o sistema em equilíbrio com o bloco $M$ apoiado na plataforma $P$, o fio está tracionado com $T = P_m = 15\text{ N}$ nos dois ramos verticais.
+    \item \textbf{Módulo de $\vec{F}$:} na roldana em equilíbrio, a força para cima $\vec{F}$ equilibra as duas trações para baixo nos ramos do fio:
+    \[
+        F = 2\,T = 2 \cdot 15 = 30\text{ N}
+    \]
+    \item \textbf{Módulo da força normal exercida pela plataforma sobre $M$:} para o bloco $M$ em equilíbrio vertical ($N + T = P_M$):
+    \[
+        N = P_M - T = 55 - 15 = 40\text{ N}
+    \]
+\end{itemize}
+
+\subsection*{Questão 8}
+\textbf{Dados:} $m = 70\text{ kg}$ e $g = 10\text{ m/s}^2$.
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Aceleração do elevador em cada trecho:}
+    \begin{itemize}
+        \item \textbf{Trecho I ($0$ a $3\text{ s}$):} $a_1 = \dfrac{1{,}5 - 0}{3 - 0} = 0{,}5\text{ m/s}^2$ (para cima).
+        \item \textbf{Trecho II ($3\text{ s}$ a $15\text{ s}$):} $a_2 = 0\text{ m/s}^2$ (movimento uniforme).
+        \item \textbf{Trecho III ($15\text{ s}$ a $18\text{ s}$):} $a_3 = \dfrac{0 - 1{,}5}{18 - 15} = -0{,}5\text{ m/s}^2$ (desaceleração de módulo $0{,}5\text{ m/s}^2$).
+    \end{itemize}
+
+    \item \textbf{Força normal exercida pelo piso sobre Lucas ($N = m(g + a)$):}
+    \begin{itemize}
+        \item \textbf{Trecho I ($0$ a $3\text{ s}$):} $N_1 = 70 \cdot (10 + 0{,}5) = 735\text{ N}$.
+        \item \textbf{Trecho II ($3\text{ s}$ a $15\text{ s}$):} $N_2 = 70 \cdot (10 + 0) = 700\text{ N}$.
+        \item \textbf{Trecho III ($15\text{ s}$ a $18\text{ s}$):} $N_3 = 70 \cdot (10 - 0{,}5) = 665\text{ N}$.
+    \end{itemize}
+
+    \item \textbf{Distância total percorrida pelo elevador:}
+    Pela área do trapézio sob o gráfico $v \times t$ (base maior $= 18\text{ s}$, base menor $= 12\text{ s}$ e altura $= 1{,}5\text{ m/s}$):
+    \[
+        \Delta S = \frac{(18 + 12) \cdot 1{,}5}{2} = \frac{30 \cdot 1{,}5}{2} = 22{,}5\text{ m}
+    \]
+\end{enumerate}
+
+\end{document}

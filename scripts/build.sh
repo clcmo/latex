@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# build.sh — compila os documentos LaTeX e gera o site e os READMEs.
+# build.sh — compila os documentos LaTeX (PDF e HTML) e gera o site e os READMEs.
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCE_DIR="$REPO_ROOT/src"
@@ -21,6 +21,46 @@ command -v python3 >/dev/null || {
   exit 1
 }
 
+HAS_PANDOC=0
+if command -v pandoc >/dev/null; then
+  HAS_PANDOC=1
+else
+  echo "Aviso: pandoc não encontrado; as versões HTML serão ignoradas."
+fi
+
+# Gera a versão HTML (com LaTeX) de um documento. É opcional: se falhar, o PDF continua valendo.
+gerar_html() {
+  local cat="$1" texfile="$2" filename="$3" tema
+  [[ "$HAS_PANDOC" == 1 ]] || return 0
+  if grep -qiE '^%[[:space:]]*html:[[:space:]]*off' "$texfile"; then
+    echo "     HTML desativado neste documento"
+    return 0
+  fi
+  tema="$(python3 "$PYTHON_DIR/site_data.py" tema "$texfile")"
+  mkdir -p "$SITE_DIR/$cat/html"
+  if pandoc "$texfile" \
+      --from latex --to html5 --standalone --mathjax \
+      --template "$REPO_ROOT/templates/page.html" \
+      --metadata "basename=$filename" \
+      --metadata "category=$cat" \
+      --metadata "tema=$tema" \
+      --output "$SITE_DIR/$cat/html/$filename.html" </dev/null >/dev/null 2>&1; then
+    echo "     OK: html/$filename.html (tema: $tema)"
+  else
+    rm -f "$SITE_DIR/$cat/html/$filename.html"
+    echo "     AVISO: HTML não gerado para $cat/$filename.tex"
+  fi
+}
+
+# Documentos que usam fontspec/\babelfont precisam de LuaLaTeX; os demais usam pdflatex.
+escolher_motor() {
+  if grep -qE '\\usepackage(\[[^]]*\])?\{fontspec\}|\\babelfont' "$1"; then
+    echo lualatex
+  else
+    echo pdflatex
+  fi
+}
+
 echo "==> Criando estrutura do site..."
 rm -rf "$SITE_DIR"
 mkdir -p "$SITE_DIR/assets"
@@ -32,7 +72,6 @@ python3 "$PYTHON_DIR/build_readme.py"
 
 for cat in $CATEGORIES; do
   mkdir -p "$SITE_DIR/$cat"
-  : > "$TMP_DIR/$cat.tsv"
 done
 
 echo "==> Compilando documentos..."
@@ -43,26 +82,21 @@ for cat in $CATEGORIES; do
 
   while IFS= read -r -d '' texfile; do
     filename="$(basename "$texfile" .tex)"
-    echo "  -> $cat/$filename.tex"
+    engine="$(escolher_motor "$texfile")"
+    echo "  -> $cat/$filename.tex ($engine)"
 
-    if pdflatex \
+    if "$engine" \
         -interaction=nonstopmode \
         -halt-on-error \
         -output-directory="$OUT_DIR" \
         "$texfile" >/dev/null 2>&1 &&
-       pdflatex \
+       "$engine" \
         -interaction=nonstopmode \
         -halt-on-error \
         -output-directory="$OUT_DIR" \
         "$texfile" >/dev/null 2>&1; then
 
-      title="$({ grep -m1 '\\title{' "$texfile" || true; } |
-        sed 's/.*\\title{\(.*\)}/\1/' |
-        sed 's/\\\\/ /g' |
-        tr -d '{}' |
-        xargs)"
-      [[ -n "$title" ]] || title="$filename"
-      printf '%s\t%s\n' "$title" "$filename.pdf" >> "$TMP_DIR/$cat.tsv"
+      gerar_html "$cat" "$texfile" "$filename"
 
       rm -f "$OUT_DIR/$filename.aux" "$OUT_DIR/$filename.log" \
         "$OUT_DIR/$filename.out" "$OUT_DIR/$filename.toc" \
@@ -82,41 +116,19 @@ for cat in $CATEGORIES; do
   done < <(find "$SRC_DIR" -maxdepth 1 -name "*.tex" -print0 | sort -z)
 done
 
+echo "==> Gerando cores dos temas..."
+python3 "$PYTHON_DIR/generate_theme_css.py" --site "$SITE_DIR"
+
+echo "==> Gerando visualizadores..."
+python3 "$PYTHON_DIR/generate_viewers.py" \
+  --site "$SITE_DIR" \
+  --template "$REPO_ROOT/templates/viewer.html"
+
 echo "==> Gerando index.html..."
-python3 - "$TMP_DIR" "$SITE_DIR/index.html" "$PYTHON_DIR/generate_index.py" \
-  "$REPO_ROOT/templates/index.html" <<'PY'
-import json
-import pathlib
-import subprocess
-import sys
-
-tmp_dir = pathlib.Path(sys.argv[1])
-output = sys.argv[2]
-generator = sys.argv[3]
-template = sys.argv[4]
-
-docs = {}
-for category in ("articles", "cv", "slides", "math"):
-    items = []
-    for line in (tmp_dir / f"{category}.tsv").read_text(encoding="utf-8").splitlines():
-        title, pdf_file = line.split("\t", 1)
-        items.append({"title": title, "file": pdf_file})
-    docs[category] = items
-
-subprocess.run(
-    [
-        sys.executable,
-        generator,
-        "--output",
-        output,
-        "--template",
-        template,
-        "--docs",
-        json.dumps(docs, ensure_ascii=False),
-    ],
-    check=True,
-)
-PY
+python3 "$PYTHON_DIR/generate_index.py" \
+  --site "$SITE_DIR" \
+  --output "$SITE_DIR/index.html" \
+  --template "$REPO_ROOT/templates/index.html"
 
 if [[ "$COMPILE_FAILURES" -gt 0 ]]; then
   echo "==> Build concluído com $COMPILE_FAILURES erro(s)."

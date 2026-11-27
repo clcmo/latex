@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>{titulo}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../assets/css/site.css"/>
+  <link rel="stylesheet" href="../../assets/css/themes.css"/>
+  <link rel="stylesheet" href="../../assets/css/style.css"/>
+</head>
+<body class="viewer-page" data-tema="{tema}">
+  <div class="topbar">
+    <a class="back" href="../../index.html">← Início</a>
+    <span class="sep">|</span>
+    <span class="tema-chip">{tema_nome}</span>
+    <span class="doc-title">{titulo}</span>
+    <span class="spacer"></span>
+    <div class="modos" role="group" aria-label="Modo de visualização">
+      <button type="button" data-modo="pdf">PDF</button>
+      <button type="button" data-modo="html">Aula em HTML</button>
+      <button type="button" data-modo="split">Lado a lado</button>
+    </div>
+    <a class="btn-dl" href="{pdf}" download>↓ Baixar PDF</a>
+    <a class="btn-dl" href="{tex}" target="_blank" rel="noopener">.tex</a>
+  </div>
+
+  <main class="viewer" id="viewer" data-html="{tem_html}" data-modo="split">
+    <section class="painel painel-pdf" aria-label="PDF">
+      <iframe src="{pdf}" title="PDF: {titulo}"></iframe>
+    </section>
+    <section class="painel painel-html" aria-label="Aula em HTML">
+      <iframe src="{html}" title="HTML: {titulo}" loading="lazy"></iframe>
+    </section>
+  </main>
+  <script src="../../assets/js/viewer.js"></script>
+</body>
+</html>
